@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  host-app:
+    build:
+      context: ./host-app
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./host-app:/app
+      - /app/node_modules
+    command: npm run dev
+    depends_on:
+      - auth-mf
+    environment:
+      - NODE_ENV=development
+      - NEXT_PRIVATE_LOCAL_WEBPACK=true
+      - NEXT_PUBLIC_REMOTE_AUTH_URL=${NEXT_PUBLIC_REMOTE_AUTH_URL}
+
+  auth-mf:
+    build:
+      context: ./auth-mf
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./auth-mf:/app
+      - /app/node_modules
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+      - NEXT_PRIVATE_LOCAL_WEBPACK=true
+      - HOST_APP_URL=http://host-app:3000
