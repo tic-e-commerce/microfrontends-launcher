@@ -4,6 +4,7 @@ const remotes = (isServer) => {
   const location = isServer ? "ssr" : "chunks";
   return {
     auth: `auth@${process.env.NEXT_PUBLIC_REMOTE_AUTH_URL}/_next/static/${location}/remoteEntry.js`,
+    profile: `profile@${process.env.NEXT_PUBLIC_REMOTE_PROFILE_URL}/_next/static/${location}/remoteEntry.js`,
   };
 };
 const nextConfig = {

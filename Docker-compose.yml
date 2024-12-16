@@ -31,4 +31,19 @@ services:
     environment:
       - NODE_ENV=development
       - NEXT_PRIVATE_LOCAL_WEBPACK=true
-      - HOST_APP_URL=http://host-app:3000
+      - HOST_APP_URL=${HOST_APP_URL}
+
+  profile-mf:
+    build:
+      context: ./profile-mf
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./profile-mf:/app
+      - /app/node_modules
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+      - NEXT_PRIVATE_LOCAL_WEBPACK=true
+      - HOST_APP_URL=${HOST_APP_URL}
