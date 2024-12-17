@@ -1,6 +1,10 @@
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+
 const Home = () => {
   return (
     <main>
+      <Header />
       <h1>Host App</h1>
       <p className="bg-primary text-white p-2">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate
@@ -9,6 +13,7 @@ const Home = () => {
         corporis molestias. Sequi.
       </p>
       <h2>Leonel Otavalo</h2>
+      <Footer />
     </main>
   );
 };

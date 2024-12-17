@@ -5,6 +5,7 @@ const remotes = (isServer) => {
   return {
     auth: `auth@${process.env.NEXT_PUBLIC_REMOTE_AUTH_URL}/_next/static/${location}/remoteEntry.js`,
     profile: `profile@${process.env.NEXT_PUBLIC_REMOTE_PROFILE_URL}/_next/static/${location}/remoteEntry.js`,
+    userPreferences: `userPreferences@${process.env.NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL}/_next/static/${location}/remoteEntry.js`,
   };
 };
 const nextConfig = {
@@ -15,7 +16,10 @@ const nextConfig = {
         name: "host",
         filename: "static/chunks/remoteEntry.js",
         remotes: remotes(options.isServer),
-        exposes: {},
+        exposes: {
+          "./Header": "./components/Header.tsx",
+          "./Footer": "./components/Footer.tsx",
+        },
         extraOptions: {
           exposePages: true,
           automaticAsyncBoundary: true,

@@ -17,6 +17,8 @@ services:
       - NODE_ENV=development
       - NEXT_PRIVATE_LOCAL_WEBPACK=true
       - NEXT_PUBLIC_REMOTE_AUTH_URL=${NEXT_PUBLIC_REMOTE_AUTH_URL}
+      - NEXT_PUBLIC_REMOTE_PROFILE_URL=${NEXT_PUBLIC_REMOTE_PROFILE_URL}
+      - NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL=${NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL}
 
   auth-mf:
     build:
@@ -41,6 +43,21 @@ services:
       - "3002:3002"
     volumes:
       - ./profile-mf:/app
+      - /app/node_modules
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+      - NEXT_PRIVATE_LOCAL_WEBPACK=true
+      - HOST_APP_URL=${HOST_APP_URL}
+
+  user-preferences-mf:
+    build:
+      context: ./user-preferences-mf
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./user-preferences-mf:/app
       - /app/node_modules
     command: npm run dev
     environment:
