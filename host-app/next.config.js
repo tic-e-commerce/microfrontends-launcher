@@ -8,6 +8,7 @@ const remotes = (isServer) => {
     userPreferences: `userPreferences@${process.env.NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL}/_next/static/${location}/remoteEntry.js`,
   };
 };
+
 const nextConfig = {
   reactStrictMode: true,
   webpack(config, options) {
