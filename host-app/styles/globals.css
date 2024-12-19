@@ -8,3 +8,7 @@
 .inter-font {
   font-family: "Inter", sans-serif !important;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}

@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { LoginUser } from "@/services/auth.service";
 
-const LoginForm = () => {
+// Props para abrir modal
+interface LoginFormProps {
+  onShowModal: () => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ onShowModal }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,14 +20,19 @@ const LoginForm = () => {
     setSuccess("");
 
     try {
-      const response = await LoginUser(email, password);
+      const response = await LoginUser({ email, password });
       setSuccess("Inicio de sesión exitoso.");
       localStorage.setItem("token", response.data.token);
     } catch (err: any) {
-      setError(
-        err.response?.data?.message ||
-          "Error al iniciar sesión. Intenta de nuevo."
-      );
+      if (Array.isArray(err.response?.data?.message)) {
+        const messages = err.response?.data?.message.join(", ");
+        setError(messages);
+      } else {
+        setError(
+          err.response?.data?.message ||
+            "An error occurred during registration. Please try again."
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -37,6 +47,14 @@ const LoginForm = () => {
             <small>Enter you details bellow</small>
           </p>
           <form onSubmit={handleSubmit}>
+            {/* Mensaje de error */}
+            {error && <div className="alert alert-danger mt-3">{error}</div>}
+
+            {/* Mensaje de éxito */}
+            {success && (
+              <div className="alert alert-success mt-3">{success}</div>
+            )}
+
             {/* Campo de Email */}
             <div className="my-5">
               <input
@@ -73,20 +91,14 @@ const LoginForm = () => {
                   {loading ? "Loading..." : "Log in"}
                 </button>
               </div>
-              <div className="col-6 align-items-center d-flex justify-content-end">
-                <a href="#" className="text-decoration-none text-primary p-3">
+              <div className="col-6 align-items-center d-flex justify-content-end cursor-pointer">
+                <span
+                  className="text-decoration-none text-primary p-3"
+                  onClick={onShowModal}>
                   Forgot Password?
-                </a>
+                </span>
               </div>
             </div>
-
-            {/* Mensaje de error */}
-            {error && <div className="alert alert-danger mt-3">{error}</div>}
-
-            {/* Mensaje de éxito */}
-            {success && (
-              <div className="alert alert-success mt-3">{success}</div>
-            )}
           </form>
         </div>
       </div>
