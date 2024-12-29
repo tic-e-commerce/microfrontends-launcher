@@ -36,7 +36,7 @@ const nextConfig = {
         filename: "static/chunks/remoteEntry.js",
         remotes: remotes(options.isServer),
         exposes: {
-          "./ProductsComponent": "./components/products.component.tsx",
+          "./ProductsList": "./components/products-list/products-list.component.tsx",
         },
         extraOptions: {
           exposePages: true,

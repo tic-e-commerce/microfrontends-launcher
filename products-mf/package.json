@@ -19,6 +19,7 @@
     "react-dom": "18.2.0",
     "reflect-metadata": "^0.1.13",
     "sass": "^1.83.0",
+    "swiper": "^11.1.15",
     "webpack": "^5.76.3"
   },
   "devDependencies": {

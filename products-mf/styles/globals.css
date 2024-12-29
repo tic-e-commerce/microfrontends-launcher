@@ -1,2 +1,12 @@
 /* Importar del modulo ./auth.module.css */
 @import "./auth.module.css";
+
+.products-container {
+  padding: 2rem 1rem;
+}
+
+.products-list {
+  display: flex;
+}
+
+
