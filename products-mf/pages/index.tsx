@@ -1,3 +1,4 @@
+import ProductDetail from "@/components/product-detail/product-detail.component";
 import ProductsList from "@/components/products-list/products-list.component";
 
 const Home = () => {
@@ -54,6 +55,7 @@ const Home = () => {
 
   return (
     <div>
+      <ProductDetail />
       <ProductsList title="Product List" products={sampleProducts} />
     </div>
   );

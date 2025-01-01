@@ -6,19 +6,22 @@ import "swiper/css";
 import "swiper/css/navigation";
 import styles from "./products-list.module.css";
 
+interface ProductsListProps {
+  title: string;
+  products: Product[];
+  showViewAllButton?: boolean; // Nueva prop
+}
+
 const ProductsList = ({
   title,
   products,
-}: {
-  title: string;
-  products: Product[];
-}) => {
+  showViewAllButton = true, // Valor por defecto: true
+}: ProductsListProps) => {
   return (
     <div className={styles.productsContainer}>
-      {/* Título y botón */}
+      {/* Título */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h3 className="fw-bold">{title}</h3>
-        <button className="btn btn-outline-danger">View All Products</button>
       </div>
 
       {/* Swiper */}
@@ -42,6 +45,13 @@ const ProductsList = ({
           </SwiperSlide>
         ))}
       </Swiper>
+
+      {/* Botón "View All Products" */}
+      {showViewAllButton && (
+        <div className="d-flex justify-content-center mt-4">
+          <button className="btn btn-danger">View All Products</button>
+        </div>
+      )}
     </div>
   );
 };
