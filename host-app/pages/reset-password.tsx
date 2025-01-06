@@ -1,16 +1,17 @@
 import dynamic from "next/dynamic";
-import Image from "next/image";
-import BannerLogin from "@/public/images/banner_login.png";
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-const DynamicRegisterForm = dynamic(() => import("auth/RegisterForm"), {
-  ssr: false,
-  loading: () => <p>Cargando el formulario...</p>,
-});
+const DynamicForgotPasswordForm = dynamic(
+  () => import("auth/ForgotPasswordForm"),
+  {
+    ssr: false,
+    loading: () => <p>Cargando el formulario...</p>,
+  }
+);
 
-const Register = () => {
+const ResetPassword = () => {
   const [remoteAvailable, setRemoteAvailable] = useState(true);
 
   useEffect(() => {
@@ -40,20 +41,12 @@ const Register = () => {
       <p>El servicio de autenticación no está disponible en este momento.</p>
     );
   }
-
   return (
     <div>
       <Header />
-      <div className="p-0 m-0">
-        <div className="row p-0 m-0">
-          <div className="col-12 col-md-6 p-0 m-0">
-            <Image src={BannerLogin} alt="Banner Login" className="img-fluid" />
-          </div>
-          <div className="col-12 col-md-6 p-0 m-0">
-            <div className="mt-5">
-              <DynamicRegisterForm />
-            </div>
-          </div>
+      <div className="d-flex flex-column align-items-center justify-content-center vh-100">
+        <div className="w-50">
+          <DynamicForgotPasswordForm />
         </div>
       </div>
       <Footer />
@@ -61,4 +54,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default ResetPassword;

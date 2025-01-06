@@ -40,6 +40,7 @@ const nextConfig = {
           "./RegisterForm": "./components/RegisterForm.tsx",
           "./ForgotPasswordEmailForm":
             "./components/ForgotPasswordEmailForm.tsx",
+          "./ForgotPasswordForm": "./components/ForgotPasswordForm.tsx",
         },
         extraOptions: {
           exposePages: true,
