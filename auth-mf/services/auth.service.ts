@@ -1,5 +1,6 @@
 import { LoginUserData } from "@/interfaces/login-data.interface";
 import { RegisterUserData } from "@/interfaces/register-data.interface";
+import { ResetPasswordData } from "@/interfaces/reset-password-data.interface";
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -18,4 +19,10 @@ export const RegisterUser = async (userData: RegisterUserData) => {
 
 export const SendResetPasswordEmail = async (email: string) => {
   return axios.post(`${API_URL}/api/auth/send-reset-password-email`, { email });
+};
+
+export const ResetPassword = async (resetPasswordData: ResetPasswordData) => {
+  return axios.post(`${API_URL}/api/auth/reset-password`, {
+    ...resetPasswordData,
+  });
 };
