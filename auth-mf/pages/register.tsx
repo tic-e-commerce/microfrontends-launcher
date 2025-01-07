@@ -1,8 +1,8 @@
-import LoginForm from "@/components/LoginForm";
 import Image from "next/image";
 import BannerLogin from "@/public/images/banner_login.png";
+import RegisterForm from "@/components/RegisterForm";
 
-const Home = () => {
+const Register = () => {
   return (
     <div className="vh-100 p-0 m-0">
       <div className="row p-0 m-0">
@@ -10,11 +10,11 @@ const Home = () => {
           <Image src={BannerLogin} alt="Banner Login" className="img-fluid" />
         </div>
         <div className="col-12 col-md-6 p-0 m-0">
-          <LoginForm />
+          <RegisterForm />
         </div>
       </div>
     </div>
   );
 };
 
-export default Home;
+export default Register;

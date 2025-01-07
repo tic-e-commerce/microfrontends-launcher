@@ -9,6 +9,7 @@ const remotes = (isServer) => {
     products: `products@${process.env.NEXT_PUBLIC_REMOTE_PRODUCTS_URL}/_next/static/${location}/remoteEntry.js`,
   };
 };
+
 const nextConfig = {
   reactStrictMode: true,
   webpack(config, options) {

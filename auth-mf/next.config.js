@@ -37,6 +37,10 @@ const nextConfig = {
         remotes: remotes(options.isServer),
         exposes: {
           "./LoginForm": "./components/LoginForm.tsx",
+          "./RegisterForm": "./components/RegisterForm.tsx",
+          "./ForgotPasswordEmailForm":
+            "./components/ForgotPasswordEmailForm.tsx",
+          "./ForgotPasswordForm": "./components/ForgotPasswordForm.tsx",
         },
         extraOptions: {
           exposePages: true,

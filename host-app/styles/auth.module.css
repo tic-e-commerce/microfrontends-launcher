@@ -1,10 +1,5 @@
-.btn-login {
-  background-color: #445f5d;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  opacity: 0.9;
+.input-border-bottom:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: inherit;
 }
