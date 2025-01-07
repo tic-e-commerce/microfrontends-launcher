@@ -23,6 +23,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onShowModal }) => {
       const response = await LoginUser({ email, password });
       setSuccess("Inicio de sesión exitoso.");
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem(
+        "user_id",
+        JSON.stringify(response.data.user.user_id)
+      );
+      localStorage.setItem(
+        "full_name",
+        `${response.data.user.first_name} ${response.data.user.last_name}`
+      );
     } catch (err: any) {
       if (Array.isArray(err.response?.data?.message)) {
         const messages = err.response?.data?.message.join(", ");
