@@ -1,9 +1,9 @@
-import UpdateProfileForm from "@/components/UpdateProfileForm";
+import ChangePasswordForm from "@/components/ChangePasswordForm";
 
 const Home = () => {
   return (
     <div>
-      <UpdateProfileForm />
+      <ChangePasswordForm />
     </div>
   );
 };

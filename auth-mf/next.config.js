@@ -36,8 +36,8 @@ const nextConfig = {
         filename: "static/chunks/remoteEntry.js",
         remotes: remotes(options.isServer),
         exposes: {
-          "./LoginForm": "./components/LoginForm.tsx",
           "./RegisterForm": "./components/RegisterForm.tsx",
+          "./LoginForm": "./components/LoginForm.tsx",
           "./ForgotPasswordEmailForm":
             "./components/ForgotPasswordEmailForm.tsx",
           "./ForgotPasswordForm": "./components/ForgotPasswordForm.tsx",
