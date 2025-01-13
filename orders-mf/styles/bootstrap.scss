@@ -1,0 +1,11 @@
+// styles/bootstrap.scss
+
+// Importa las variables predeterminadas de Bootstrap
+@import "node_modules/bootstrap/scss/functions";
+
+// Sobrescribe las variables (ejemplo de colores)
+$primary: #db4444; // Cambia el color primario a verde
+$secondary: #ff9800; // Cambia el color secundario a naranja
+
+// Importa los estilos principales de Bootstrap
+@import "node_modules/bootstrap/scss/bootstrap";
