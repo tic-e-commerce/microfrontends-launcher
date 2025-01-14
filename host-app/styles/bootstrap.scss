@@ -5,6 +5,8 @@
 
 // Sobrescribe las variables (ejemplo de colores)
 $primary: #db4444; // Cambia el color primario a verde
+// Modificar dark
+$dark: #000000;
 
 // Importa los estilos principales de Bootstrap
 @import "node_modules/bootstrap/scss/bootstrap";

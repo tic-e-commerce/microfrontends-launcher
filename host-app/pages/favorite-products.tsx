@@ -1,3 +1,5 @@
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 
@@ -35,11 +37,15 @@ const FavoriteProducts = () => {
 
   return (
     <div>
-      {remoteAvailable ? (
-        <DynamicFavoritesProducts />
-      ) : (
-        <p>No se pudo conectar con el servidor remoto. Intente más tarde.</p>
-      )}
+      <Header />
+      <div className="container my-3">
+        {remoteAvailable ? (
+          <DynamicFavoritesProducts />
+        ) : (
+          <p>No se pudo conectar con el servidor remoto. Intente más tarde.</p>
+        )}
+      </div>
+      <Footer />
     </div>
   );
 };
