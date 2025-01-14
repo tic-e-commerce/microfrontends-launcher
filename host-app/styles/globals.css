@@ -15,3 +15,12 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+input[type="search"] {
+  height: 40px;
+}
+
+.hover-link:hover {
+  color: #007bff !important;
+  text-decoration: underline;
+}

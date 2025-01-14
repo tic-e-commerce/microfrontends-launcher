@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { ProfileUser, UpdateProfile } from "@/services/profile.service";
-import { User } from "@/model/user.model";
+import { User } from "@/models/user.model";
 
 const UpdateProfileForm = () => {
   const [profile, setProfile] = useState<User>({
