@@ -135,7 +135,7 @@ const Header = () => {
                       className="dropdown-menu dropdown-menu-end border-0 shadow rounded-1"
                       aria-labelledby="accountDropdown">
                       <li>
-                        <Link href="/account/manage" className="dropdown-item">
+                        <Link href="/profile" className="dropdown-item">
                           <FontAwesomeIcon icon={faUserAlt} className="me-2" />
                           My Account
                         </Link>
