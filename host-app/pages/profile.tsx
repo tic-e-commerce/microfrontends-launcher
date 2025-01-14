@@ -62,10 +62,32 @@ const Profile = () => {
           </div>
         </div>
         <div className="row">
-          <div className="col-4"></div>
+          <div className="col-4">
+            <div className="my-4">
+              <span className="fs-4 fw-bold">Account</span>
+              <div className="ms-2">
+                <ul className="list-unstyled">
+                  <li className="my-3">
+                    <a
+                      href="/profile"
+                      className="text-primary text-decoration-none">
+                      My Profile
+                    </a>
+                  </li>
+                  <li className="my-3">
+                    <a
+                      href="/favorite-products"
+                      className="text-secondary text-decoration-none">
+                      Wishlist
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
           <div className="col-8">
             {remoteAvailable ? (
-              <div>
+              <div className="shadow p-4 my-4">
                 <DynamicUpdateProfileForm />
                 <DynamicChangePasswordForm />
               </div>
