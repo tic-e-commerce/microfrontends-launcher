@@ -83,7 +83,9 @@ const ChangePasswordForm = () => {
           new_password: "",
         });
         setConfirmPassword("");
-        router.push("/login");
+        setTimeout(() => {
+          router.push("/login");
+        }, 3000);
       } else {
         setError("There was an issue changing the password.");
       }
