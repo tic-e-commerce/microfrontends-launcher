@@ -10,6 +10,7 @@ const remotes = (isServer) => {
     cart: `cart@${process.env.NEXT_PUBLIC_REMOTE_CART_URL}/_next/static/${location}/remoteEntry.js`,
     orders: `orders@${process.env.NEXT_PUBLIC_REMOTE_ORDERS_URL}/_next/static/${location}/remoteEntry.js`,
     payments: `payments@${process.env.NEXT_PUBLIC_REMOTE_PAYMENTS_URL}/_next/static/${location}/remoteEntry.js`,
+    attributes: `attributes@${process.env.NEXT_PUBLIC_REMOTE_ATTRIBUTES_URL}/_next/static/${location}/remoteEntry.js`,
   };
 };
 
