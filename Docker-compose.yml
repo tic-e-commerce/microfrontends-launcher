@@ -71,7 +71,7 @@ services:
       context: ./products-mf
       dockerfile: Dockerfile
     ports:
-      - "3005:3005"
+      - "3007:3007"
     volumes:
       - ./products-mf:/app
       - /app/node_modules

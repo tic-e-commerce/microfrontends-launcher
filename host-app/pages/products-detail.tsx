@@ -11,6 +11,10 @@ const ProductDetail = dynamic(() => import("products/ProductDetail"), {
   ssr: false,
 });
 
+const AttributesList = dynamic(() => import("attributes/AttributesList"), {
+  ssr: false,
+});
+
 const ProductsDetailPage = () => {
   const sampleProducts = [
     {
@@ -52,6 +56,7 @@ const ProductsDetailPage = () => {
       <Header />
       <ProductDetail />
       <ProductsList title="Related Products" products={sampleProducts} />
+      <AttributesList />
       <Footer />
     </div>
   );
