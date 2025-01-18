@@ -1,0 +1,6 @@
+input:disabled {
+  background-color: #f0f0f0;
+  color: grey;
+  cursor: not-allowed;
+  border: none;
+}

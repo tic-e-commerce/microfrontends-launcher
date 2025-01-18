@@ -1,18 +1,24 @@
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 
 const Home = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirigir a la ruta de login al cargar el componente
+    router.push("/login");
+  }, [router]);
+
   return (
     <main>
       <Header />
-      <h1>Host App</h1>
-      <p className="bg-primary text-white p-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate
-        impedit magni voluptatibus temporibus! Sed a voluptatem facilis et
-        perferendis nostrum culpa. Facilis dicta nisi expedita nihil labore
-        corporis molestias. Sequi.
-      </p>
-      <h2>Leonel Otavalo</h2>
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
       <Footer />
     </main>
   );

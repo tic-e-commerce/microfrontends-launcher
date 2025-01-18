@@ -1,0 +1,48 @@
+# Dependencies
+FROM node:21-alpine3.19 as deps
+
+WORKDIR /usr/src/app
+
+# Copiar el package.json y package-lock.json desde el contexto adecuado
+COPY ./auth-mf/package.json ./  
+COPY ./auth-mf/package-lock.json ./
+
+RUN npm install
+
+# Builder - Build the app
+FROM node:21-alpine3.19 as build
+
+ARG NEXT_PUBLIC_BACKEND_URL
+ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
+
+WORKDIR /usr/src/app
+
+# Copiar los node_modules desde la etapa de dependencias
+COPY --from=deps /usr/src/app/node_modules ./node_modules
+
+# Copiar el código fuente de la aplicación
+COPY ./auth-mf .
+
+# Construir la aplicación para producción
+RUN npm run build
+
+# Crear la imagen final
+FROM node:21-alpine3.19 as prod
+
+WORKDIR /usr/src/app
+
+# Copiar los node_modules y la aplicación construida
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/.next ./.next
+COPY ./auth-mf/public ./public
+COPY ./auth-mf/next.config.js ./next.config.js
+
+ENV NODE_ENV=production
+ENV PORT=3000
+
+USER node
+
+EXPOSE 3000
+
+# Ejecutar la aplicación
+CMD ["npm", "start"]

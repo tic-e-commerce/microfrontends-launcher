@@ -37,6 +37,7 @@ const nextConfig = {
         remotes: remotes(options.isServer),
         exposes: {
           "./UpdateProfileForm": "./components/UpdateProfileForm.tsx",
+          "./ChangePasswordForm": "./components/ChangePasswordForm.tsx",
         },
         extraOptions: {
           exposePages: true,

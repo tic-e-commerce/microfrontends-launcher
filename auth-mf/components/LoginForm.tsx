@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { LoginUser } from "@/services/auth.service";
+import { useRouter } from "next/router";
 
 // Props para abrir modal
 interface LoginFormProps {
@@ -12,6 +13,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onShowModal }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,8 +23,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ onShowModal }) => {
 
     try {
       const response = await LoginUser({ email, password });
-      setSuccess("Inicio de sesión exitoso.");
+      setSuccess("You have successfully logged in.");
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem(
+        "user_id",
+        JSON.stringify(response.data.user.user_id)
+      );
+      localStorage.setItem(
+        "full_name",
+        `${response.data.user.first_name} ${response.data.user.last_name}`
+      );
+      router.push("/shop");
     } catch (err: any) {
       if (Array.isArray(err.response?.data?.message)) {
         const messages = err.response?.data?.message.join(", ");
