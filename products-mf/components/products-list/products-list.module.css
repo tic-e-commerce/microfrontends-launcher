@@ -1,0 +1,21 @@
+.productsContainer {
+  padding: 2rem 1rem;
+}
+
+.productsSwiper {
+  padding: 1rem 0;
+}
+
+.productsSwiper .swiper-button-next,
+.productsSwiper .swiper-button-prev {
+  color: #ff4d4f; /* Color de las flechas */
+}
+
+.productsSwiper .swiper-slide {
+  display: flex;
+  justify-content: center;
+}
+
+.swiper-slide > div {
+  width: 100%; /* Asegura que el contenido del slide use todo el ancho */
+}
