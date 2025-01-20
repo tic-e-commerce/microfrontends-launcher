@@ -2,14 +2,18 @@ import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-export const createPaymentSession = async (paymentData: { amount: number; currency: string }) => {
-  return axios.post(`${API_URL}/payments/create-payment-session`, paymentData);
+export const createPaymentSession = async (paymentData: { order_id: string; currency: string }, token: string) => {
+  return axios.post(`${API_URL}/api/payments/create-payment-session`, paymentData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export const handleSuccess = async () => {
-  return axios.get(`${API_URL}/payments/success`);
+  return axios.get(`${API_URL}/api/payments/success`);
 };
 
 export const handleCancel = async () => {
-  return axios.get(`${API_URL}/payments/cancel`);
+  return axios.get(`${API_URL}/api/payments/cancel`);
 };
