@@ -24,7 +24,7 @@ services:
   auth-mf:
     build:
       context: ./auth-mf
-      dockerfile: Dockerfile
+      dockerfile: dockerfile.dev
     ports:
       - "3001:3001"
     volumes:
@@ -35,6 +35,8 @@ services:
       - NODE_ENV=development
       - NEXT_PRIVATE_LOCAL_WEBPACK=true
       - HOST_APP_URL=${HOST_APP_URL}
+      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+
 
   profile-mf:
     build:
@@ -50,6 +52,7 @@ services:
       - NODE_ENV=development
       - NEXT_PRIVATE_LOCAL_WEBPACK=true
       - HOST_APP_URL=${HOST_APP_URL}
+      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
 
   user-preferences-mf:
     build:
@@ -65,6 +68,7 @@ services:
       - NODE_ENV=development
       - NEXT_PRIVATE_LOCAL_WEBPACK=true
       - HOST_APP_URL=${HOST_APP_URL}
+      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
 
   products-mf:
     build:
@@ -80,3 +84,4 @@ services:
       - NODE_ENV=development
       - NEXT_PRIVATE_LOCAL_WEBPACK=true
       - HOST_APP_URL=${HOST_APP_URL}
+      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
