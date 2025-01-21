@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  host-app:
+    build:
+      context: ./host-app
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_REMOTE_AUTH_URL: ${NEXT_PUBLIC_REMOTE_AUTH_URL}
+        NEXT_PUBLIC_REMOTE_PROFILE_URL: ${NEXT_PUBLIC_REMOTE_PROFILE_URL}
+        NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL: ${NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL}
+        NEXT_PUBLIC_REMOTE_PRODUCTS_URL: ${NEXT_PUBLIC_REMOTE_PRODUCTS_URL}
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_REMOTE_AUTH_URL=${NEXT_PUBLIC_REMOTE_AUTH_URL}
+      - NEXT_PUBLIC_REMOTE_PROFILE_URL=${NEXT_PUBLIC_REMOTE_PROFILE_URL}
+      - NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL=${NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL}
+      - NEXT_PUBLIC_REMOTE_PRODUCTS_URL=${NEXT_PUBLIC_REMOTE_PRODUCTS_URL}
+    command: npm run start
+
+  auth-mf:
+    build:
+      context: ./auth-mf
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - HOST_APP_URL=${HOST_APP_URL}
+      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+    command: npm run start

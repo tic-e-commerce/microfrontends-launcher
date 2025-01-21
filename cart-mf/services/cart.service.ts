@@ -6,6 +6,7 @@ export const getCartByUserId = async (user_id: string, token: string) => {
   return axios.get(`${API_URL}/api/cart/items/${user_id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "true",
     },
   });
 };

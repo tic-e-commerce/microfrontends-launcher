@@ -8,6 +8,7 @@ export const ProfileUser = async (user_id: string, token: string) => {
   return axios.get(`${API_URL}/api/profile/${user_id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "true",
     },
   });
 };

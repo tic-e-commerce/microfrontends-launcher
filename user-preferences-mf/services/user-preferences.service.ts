@@ -9,6 +9,7 @@ export const GetFavoriteProducts = async (user_id: string, token: string) => {
     {
       headers: {
         Authorization: `Bearer ${token}`,
+        "ngrok-skip-browser-warning": "true",
       },
     }
   );

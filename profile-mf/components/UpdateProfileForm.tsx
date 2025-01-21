@@ -62,6 +62,8 @@ const UpdateProfileForm = () => {
           created_at: new Date(response.data.created_at),
           updated_at: new Date(response.data.updated_at),
         };
+
+        console.log(response);
         setProfile(fetchedProfile);
         setOriginalProfile(fetchedProfile);
         setLoading(false);
@@ -70,6 +72,7 @@ const UpdateProfileForm = () => {
           isUnauthorized();
           return;
         }
+        console.log(err);
         setError(err.message || "Error fetching profile");
         setLoading(false);
       }

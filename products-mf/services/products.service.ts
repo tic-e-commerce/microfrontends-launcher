@@ -5,12 +5,20 @@ const API_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000/api/products";
 
 export const getProducts = async () => {
-  const response = await axios.get(`${API_URL}`);
+  const response = await axios.get(`${API_URL}`, {
+    headers: {
+      "ngrok-skip-browser-warning": "true",
+    },
+  });
   return response.data;
 };
 
 export const getProductById = async (id: number) => {
-  const response = await axios.get(`${API_URL}/${id}`);
+  const response = await axios.get(`${API_URL}/${id}`, {
+    headers: {
+      "ngrok-skip-browser-warning": "true",
+    },
+  });
   return response.data;
 };
 

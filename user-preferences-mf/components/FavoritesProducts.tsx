@@ -53,6 +53,7 @@ const FavoritesProducts = () => {
           FavoriteProductFactory.fromJson
         );
 
+        console.log(response);
         setFavoriteProducts(products);
       } catch (error: any) {
         if (error.response?.status === 401) {
