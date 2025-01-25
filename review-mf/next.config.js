@@ -32,11 +32,11 @@ const nextConfig = {
   webpack(config, options) {
     config.plugins.push(
       new NextFederationPlugin({
-        name: "auth",
+        name: "reviews",
         filename: "static/chunks/remoteEntry.js",
         remotes: remotes(options.isServer),
         exposes: {
-          "./LoginForm": "./components/LoginForm.tsx",
+          "./ReviewsList": "./components/review-list/review-list.component.tsx",
         },
         extraOptions: {
           exposePages: true,
