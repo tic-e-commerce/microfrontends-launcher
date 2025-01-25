@@ -1,5 +1,5 @@
 import React from "react";
-
+import styles from "@/styles/attributes.module.css";
 const AttributesList = () => {
   const attributes = [
     { attribute_id: 1, attribute_name: "Material", value: "Leather" },
@@ -9,19 +9,10 @@ const AttributesList = () => {
   ];
 
   return (
-    <div className="attributes-list">
-      <h5 className="fw-bold mb-3">Attributes</h5>
+    <div className={styles["attributes-list"]}>
       <div className="d-flex flex-wrap gap-2">
         {attributes.map((attribute) => (
-          <span
-            key={attribute.attribute_id}
-            className="badge bg-primary text-white"
-            style={{
-              fontSize: "0.85rem",
-              padding: "0.5rem 0.75rem",
-              borderRadius: "12px",
-            }}
-          >
+          <span key={attribute.attribute_id} className={styles["attributes-badge"]}>
             <strong>{attribute.attribute_name}:</strong> {attribute.value}
           </span>
         ))}

@@ -1,0 +1,16 @@
+.attributes-list {
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+
+.attributes-list h5 {
+  margin-bottom: 1rem;
+}
+
+.attributes-badge {
+  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
+  background-color: var(--bs-primary);
+  color: white;
+}
