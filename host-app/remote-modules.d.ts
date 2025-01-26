@@ -70,7 +70,7 @@ declare module "payments/Payments" {
 declare module "products/ProductsList" {
   interface ProductsListProps {
     title: string;
-    products: any[];
+    products?: any[];
   }
   const ProductsList: React.ComponentType<ProductsListProps>;
   export default ProductsList;
@@ -79,4 +79,20 @@ declare module "products/ProductsList" {
 declare module "products/ProductDetail" {
   const ProductDetail: React.ComponentType;
   export default ProductDetail;
+}
+
+// ***ATTRIBUTES MODULE***
+
+declare module "attributes/AttributesList" {
+  const AttributesList: React.ComponentType;
+  export default AttributesList;
+}
+
+
+
+// ***REVIEWS MODULE***
+
+declare module "reviews/ReviewsList" {
+  const ReviewsList: React.ComponentType;
+  export default ReviewsList;
 }
