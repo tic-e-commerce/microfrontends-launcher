@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-const ProductsList = dynamic(() => import("products/ProductsList"), {
+const PaginatedProductsList = dynamic(() => import("products/PaginatedProductsList"), {
   ssr: false,
 });
 
@@ -12,7 +12,7 @@ const ProductsPage = () => {
     <div>
       <Header />
       <div className="container mt-4">
-        <ProductsList title="Our Products" />
+        <PaginatedProductsList title="Bienvenidos a nuestro e-commerce" />
       </div>
       <Footer />
     </div>

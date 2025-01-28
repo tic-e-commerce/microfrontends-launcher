@@ -1,12 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getAttributesByProductId } from "@/services/attribute.service";
 import styles from "@/styles/attributes.module.css";
-const AttributesList = () => {
-  const attributes = [
-    { attribute_id: 1, attribute_name: "Material", value: "Leather" },
-    { attribute_id: 2, attribute_name: "Color", value: "Black" },
-    { attribute_id: 3, attribute_name: "Size", value: "Medium" },
-    { attribute_id: 4, attribute_name: "Weight", value: "1.2kg" },
-  ];
+
+const AttributesList = ({ productId }: { productId: number }) => {
+  const [attributes, setAttributes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAttributes = async () => {
+      try {
+        const data = await getAttributesByProductId(productId); // Llamada al servicio
+        setAttributes(data);
+      } catch (error) {
+        console.error("Error al obtener los atributos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAttributes();
+  }, [productId]);
+
+  if (loading) {
+    return <p>Cargando atributos...</p>;
+  }
+
+  if (!attributes.length) {
+    return <p>No hay atributos disponibles para este producto.</p>;
+  }
 
   return (
     <div className={styles["attributes-list"]}>

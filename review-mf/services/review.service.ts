@@ -1,55 +1,72 @@
+import axios from "axios";
 import { Review } from "@/models/Review";
-// import axios from "axios";
 
-// const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
+const API_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000/api/review";
 
-// export const getReviewsByProductId = async (productId: number) => {
-//   const response = await axios.get(`${API_URL}/api/reviews?productId=${productId}`);
-//   return response.data;
-// };
-
-// export const createReview = async (reviewData: unknown) => {
-//   const response = await axios.post(`${API_URL}/api/reviews`, reviewData);
-//   return response.data;
-// };
-
-export const getReviewsByProductId = async (productId: number) => {
-  // Mock de datos para una lista de reseñas
-  return [
-    {
-      review_id: 1,
-      product_id: productId,
-      user_id: 101,
-      rating: 5,
-      comment: "Excellent product! Highly recommend it.",
-      review_date: "2023-12-15",
+// Obtener todas las reseñas
+export const getReviews = async (): Promise<Review[]> => {
+  const response = await axios.get(`${API_URL}/api/review`, {
+    headers: {
+      "ngrok-skip-browser-warning": "true",
     },
-    {
-      review_id: 2,
-      product_id: productId,
-      user_id: 102,
-      rating: 4,
-      comment: "Very good quality, but delivery took too long.",
-      review_date: "2023-12-10",
-    },
-    {
-      review_id: 3,
-      product_id: productId,
-      user_id: 103,
-      rating: 3,
-      comment: "Average product, expected more for the price.",
-      review_date: "2023-12-08",
-    },
-  ];
+  });
+
+  // Verificar si la respuesta contiene un arreglo
+  if (Array.isArray(response.data)) {
+    return response.data;
+  }
+
+  console.error("Respuesta inesperada de la API:", response.data);
+  return [];
 };
 
-export const createReview = async (reviewData: Review) => {
-  // Mock de respuesta para crear una reseña
-  return {
-    message: "Review created successfully",
-    review: {
-      ...reviewData,
-      review_date: new Date().toISOString(),
+// Obtener reseñas por `product_id`
+export const getReviewsByProductId = async (
+  productId: number
+): Promise<Review[]> => {
+  const allReviews = await getReviews();
+
+  if (Array.isArray(allReviews)) {
+    return allReviews.filter((review) => review.product_id === productId);
+  }
+
+  console.error("El resultado de getReviews no es un arreglo:", allReviews);
+  return [];
+};
+
+// Crear una nueva reseña
+export const createReview = async (reviewData: Partial<Review>) => {
+  const response = await axios.post(`${API_URL}/api/review`, reviewData, {
+    headers: {
+      "Content-Type": "application/json",
     },
-  };
+  });
+
+  return response.data;
+};
+
+// Actualizar una reseña existente
+export const updateReview = async (
+  reviewId: number,
+  updatedData: Partial<Review>
+) => {
+  const response = await axios.patch(`${API_URL}/api/review/${reviewId}`, updatedData, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return response.data;
+};
+
+// Eliminar una reseña
+export const deleteReview = async (reviewId: number) => {
+  const response = await axios.delete(`${API_URL}/api/review/${reviewId}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return response.data;
 };

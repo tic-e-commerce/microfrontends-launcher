@@ -1,43 +1,68 @@
+import React, { useEffect, useState } from "react";
+import { getProductById } from "@/services/products.service";
 import ProductActions from "./product-actions.component";
 import ProductImages from "./product-images.component";
 import ProductInfo from "./product-info.component";
 import styles from "./styles.module.css";
 
-const ProductDetail = () => {
-  const product = {
-    title: "Havic HV G-92 Gamepad",
-    rating: 4.5,
-    reviews: 150,
-    stock: true,
-    price: 192.0,
-    description:
-      "PlayStation 5 Controller Skin High quality vinyl with air channel adhesive for easy bubble free install & mess free removal. Pressure sensitive.",
-    images: [
-      "https://via.placeholder.com/300",
-      "https://via.placeholder.com/300",
-      "https://via.placeholder.com/300",
-      "https://via.placeholder.com/300",
-    ],
-    colors: ["#FF0000", "#000000", "#FFFFFF"],
-    sizes: ["XS", "S", "M", "L", "XL"],
-  };
+interface ProductDetailProps {
+  productId: number;
+}
+
+const ProductDetail = ({ productId }: ProductDetailProps) => {
+  const [product, setProduct] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setLoading(true);
+        const data = await getProductById(productId);
+        setProduct(data);
+      } catch (error) {
+        console.error("Error al obtener los detalles del producto:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
+
+  if (loading) {
+    return <p>Cargando información del producto...</p>;
+  }
+
+  if (!product) {
+    return <p>Producto no encontrado.</p>;
+  }
+
+  const {
+    product_name,
+    price,
+    rating = 0,
+    reviews = 0, // Este valor inicial será dinámico
+    stock = 0,
+    description,
+    image_url, // Imagen principal
+  } = product;
 
   return (
     <div className={`container ${styles.productDetail}`}>
       <div className="row">
         <div className="col-md-6">
-          <ProductImages images={product.images} />
+          <ProductImages mainImage={image_url} />
         </div>
         <div className="col-md-6">
           <ProductInfo
-            title={product.title}
-            rating={product.rating}
-            reviews={product.reviews}
-            stock={product.stock}
-            price={product.price}
-            description={product.description}
+            title={product_name}
+            rating={rating}
+            reviews={reviews}
+            stock={stock > 0}
+            price={parseFloat(price) || 0} // Asegurar el manejo de precios como número
+            description={description || "Descripción no disponible."}
           />
-          <ProductActions colors={product.colors} sizes={product.sizes} />
+          <ProductActions />
         </div>
       </div>
     </div>
