@@ -1,17 +1,32 @@
-# Usa una imagen base oficial de Node.js
-FROM node:18-alpine
+# Etapa 1: Construcción
+FROM node:18-alpine AS builder
 
-# Establece el directorio de trabajo dentro del contenedor
+ARG NEXT_PUBLIC_BACKEND_URL
+ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
+
 WORKDIR /app
 
-# Copia package.json y package-lock.json
+# Instala dependencias necesarias para construir
 COPY package.json package-lock.json ./
+RUN npm install --only=production && npm cache clean --force
 
-# Instala las dependencias del proyecto
-RUN npm install
+# Copia el código fuente y construye la app
+COPY . .
+RUN npm run build
 
-# Expone el puerto por defecto de Next.js
-EXPOSE 3001
+# Etapa 2: Producción
+FROM node:18-alpine AS production
 
-# Comando para ejecutar el servidor de desarrollo
-CMD ["npm", "run", "dev"]
+WORKDIR /app
+
+# Copia solo los archivos necesarios desde la etapa de construcción
+COPY --from=builder /app/.next /app/.next
+COPY --from=builder /app/public /app/public
+COPY --from=builder /app/package.json /app/package.json
+
+# Instala solo dependencias de producción
+RUN npm install --only=production && npm cache clean --force
+
+# Exponer el puerto y ejecutar la aplicación
+EXPOSE 3007
+CMD ["npm", "run", "start"]
