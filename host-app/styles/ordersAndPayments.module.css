@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  gap: 20px; /* Espacio entre las columnas */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.leftColumn {
+  flex: 2; /* El formulario ocupará más espacio */
+}
+
+.rightColumn {
+  flex: 1; /* Los detalles ocuparán menos espacio */
+}
+
+
+.breadcrumb a {
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+.breadcrumb a:hover {
+  text-decoration: none !important;
+}
