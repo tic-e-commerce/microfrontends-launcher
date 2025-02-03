@@ -7,7 +7,7 @@ const DynamicOrders = dynamic(
   () => import("orders/Orders"), 
   {
     ssr: false, 
-    loading: () => <p>Cargando las órdenes...</p>, 
+    loading: () => <p>Cargando el módulo de órdenes...</p>, 
   }
 );
 
@@ -39,7 +39,7 @@ const Orders = () => {
         {remoteAvailable ? (
           <DynamicOrders />
         ) : (
-          <p>No se pudo conectar con el servidor remoto. Intente más tarde.</p>
+          <p>No se pudo conectar con el servidor remoto de pagos. Intente más tarde.</p>
         )}
       </div>
       <Footer />
