@@ -3,21 +3,21 @@ import Header from "@/components/Header";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 
-const DynamicOrders = dynamic(
-  () => import("orders/Orders"), 
+const DynamicPayments = dynamic(
+  () => import("payments/Payments"), 
   {
     ssr: false, 
-    loading: () => <p>Cargando el módulo de órdenes...</p>, 
+    loading: () => <p>Cargando el módulo de pagos...</p>, 
   }
 );
 
-const Orders = () => {
+const Payments = () => {
   const [remoteAvailable, setRemoteAvailable] = useState(true);
 
   useEffect(() => {
     const checkRemote = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_REMOTE_ORDERS_URL}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_REMOTE_PAYMENTS_URL}`, {
           method: "HEAD",
         });
 
@@ -37,7 +37,7 @@ const Orders = () => {
       <Header />
       <div>
         {remoteAvailable ? (
-          <DynamicOrders />
+          <DynamicPayments />
         ) : (
           <p>No se pudo conectar con el servidor remoto de pagos. Intente más tarde.</p>
         )}
@@ -47,4 +47,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default Payments;

@@ -1,12 +1,11 @@
+import { CreateOrderDto } from "@/interfaces/create-order.interface";
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-export const createOrder = async (
-  orderData: { user_id: string; items: any[] },
-  token: string
-) => {
-  return axios.post(`${API_URL}/api/orders/create`, orderData, {
+
+export const createOrder = async (createOrderDto: CreateOrderDto, token: string) => {
+  return axios.post(`${API_URL}/api/orders/create`, createOrderDto, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

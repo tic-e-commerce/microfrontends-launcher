@@ -1,144 +1,163 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { getOrder } from "@/services/orders.service";
+import { createOrder, getOrder, cancelOrder } from "@/services/orders.service";
 import { OrderDetails } from "@/interfaces/order-details.interface";
+import OrderDetailsComponent from "./OrderDetails";
+import OrderSummary from "./OrderSummary";
 
 const Orders: React.FC = () => {
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
-  const [order_id, setOrderId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showCancelModal, setShowCancelModal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const storedOrderId = localStorage.getItem("order_id");
-    const token = localStorage.getItem("token");
-
-    if (!storedOrderId || !token) {
-      setError("Order ID or authorization token not found.");
-      router.push("/login");
-      return;
-    }
-
-    setOrderId(storedOrderId);
-  }, [router]);
-
-  useEffect(() => {
-    const fetchOrderDetails = async () => {
-      if (!order_id) return;
-
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("Authorization token not found.");
-        router.push("/login");
-        return;
-      }
-
-      setLoading(true);
+    const fetchOrCreateOrder = async () => {
       try {
-        const response = await getOrder(order_id, token);
-        setOrderDetails(response.data);
-      } catch (err: any) {
-        console.error("Error fetching order details:", err);
-        if (err.response?.status === 401) {
-          localStorage.removeItem("token");
+        setLoading(true);
+        const token = localStorage.getItem("token");
+        const userId = localStorage.getItem("user_id");
+        let storedOrderId = localStorage.getItem("order_id");
+
+        if (!token) {
+          setError("Authorization token not found.");
           router.push("/login");
-        } else {
-          setError("Failed to fetch order details.");
+          return;
         }
+
+        if (!userId) {
+          setError("User ID not found in localStorage.");
+          return;
+        }
+
+        if (storedOrderId) {
+          try {
+            const existingOrder = await getOrder(storedOrderId, token);
+
+            if (
+              existingOrder.data.status === "EXPIRED" ||
+              existingOrder.data.status === "CANCELLED"
+            ) {
+              console.log(
+                `Order ${storedOrderId} is ${existingOrder.data.status}, creating a new order.`
+              );
+              localStorage.removeItem("order_id");
+              storedOrderId = null;
+            } else {
+              console.log(`Using existing order: ${storedOrderId}`);
+              setOrderDetails(existingOrder.data);
+              setLoading(false);
+              return;
+            }
+          } catch (error) {
+            console.warn(
+              `Could not fetch previous order ${storedOrderId}:`,
+              error
+            );
+            localStorage.removeItem("order_id");
+            storedOrderId = null;
+          }
+        }
+
+        if (!storedOrderId) {
+          console.log("Creating a new order...");
+          const createOrderDto = { user_id: parseInt(userId, 10) };
+          const response = await createOrder(createOrderDto, token);
+          const newOrderId = response.data.order_id;
+
+          localStorage.setItem("order_id", newOrderId);
+
+          const orderDetailsResponse = await getOrder(newOrderId, token);
+          setOrderDetails(orderDetailsResponse.data);
+        }
+      } catch (err) {
+        console.error("Error creating or fetching order:", err);
+        setError("Failed to create or fetch order.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchOrderDetails();
-  }, [order_id, router]);
+    fetchOrCreateOrder();
+  }, []);
 
-  if (loading) return <p>Loading order details...</p>;
+  const handleCancelOrder = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const orderId = localStorage.getItem("order_id");
+
+      if (!token || !orderId) {
+        setError("No order to cancel.");
+        return;
+      }
+
+      await cancelOrder(orderId, token);
+
+      localStorage.removeItem("order_id");
+      localStorage.removeItem("cart_hash");
+
+      router.push("/cart");
+    } catch (err) {
+      console.error("Error cancelling order:", err);
+      setError("Failed to cancel order.");
+    }
+  };
+
+  if (loading) return <p>Loading...</p>;
   if (error) return <div className="alert alert-danger">{error}</div>;
   if (!orderDetails) return <p>No order details available.</p>;
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card shadow-sm border-0">
-            <div className="card-body">
-              <h5 className="card-title text-center mb-4 text-uppercase">
-                Order Details
-              </h5>
-              <ul className="list-group mb-4">
-                {orderDetails.order_items.map((item) => (
-                  <li
-                    key={item.order_item_id}
-                    className="list-group-item d-flex align-items-center"
-                  >
-                    <img
-                      src={item.image_url}
-                      alt={item.product_name}
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        objectFit: "cover",
-                        borderRadius: "5px",
-                        marginRight: "15px",
-                      }}
-                    />
-                    <div className="flex-grow-1">
-                      <p className="mb-1">{item.product_name}</p>
-                      <small>Quantity: {item.quantity}</small>
-                    </div>
-                    <div className="text-end">
-                      <p className="mb-0">
-                        ${(parseFloat(item.price) * item.quantity).toFixed(2)}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="border-top pt-3">
-                <div className="d-flex justify-content-between">
-                  <span>Subtotal:</span>
-                  <span>${orderDetails.subtotal.toFixed(2)}</span>
-                </div>
-                <div className="d-flex justify-content-between">
-                  <span>Shipping:</span>
-                  <span>${orderDetails.shipping_cost.toFixed(2)}</span>
-                </div>
-                <div className="d-flex justify-content-between">
-                  <span>Shipping Method:</span>
-                  <span>
-                    {orderDetails.shipping_cost === 0
-                      ? "Free"
-                      : orderDetails.shipping_cost === 7.99
-                      ? "Express"
-                      : "Standard"}
-                  </span>
-                </div>
-                <hr />
-                <div className="d-flex justify-content-between fw-bold">
-                  <span>Total:</span>
-                  <span>${orderDetails.total.toFixed(2)}</span>
-                </div>
-              </div>
-
-              <button
-                className="btn btn-danger w-100 mt-4"
-                style={{
-                  backgroundColor: "#e63946",
-                  border: "none",
-                  borderRadius: "5px",
-                  padding: "10px",
-                  fontWeight: "normal",
-                }}
-              >
-                Place Order
-              </button>
-            </div>
+    <div className="orders-wrapper mt-5">
+      <div className="order-card">
+        <div className="card order-details shadow-sm border-0">
+          <div className="card-body">
+            <h5 className="card-title">Order Details</h5>
+            <OrderDetailsComponent
+              orderItems={orderDetails.order_items ?? []}
+            />
+            <OrderSummary
+              subtotal={orderDetails.subtotal ?? orderDetails.total_amount}
+              shippingCost={orderDetails.shipping_cost ?? 0}
+              shippingMethod={
+                orderDetails.shipping_cost === 0
+                  ? "Free"
+                  : orderDetails.shipping_cost === 7.99
+                  ? "Express"
+                  : "Standard"
+              }
+              total={orderDetails.total ?? orderDetails.total_amount}
+            />
+            {/* Botón para abrir el modal de cancelación */}
+            <button
+              className="btn btn-secondary btn-cancel-order"
+              onClick={() => setShowCancelModal(true)}
+            >
+              Cancel Order
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Modal de confirmación de cancelación */}
+      {showCancelModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h4>Are you sure you want to cancel this order?</h4>
+            <p>Your selected items will remain in your cart.</p>
+            <button className="btn btn-danger" onClick={handleCancelOrder}>
+              Yes, Cancel Order
+            </button>
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowCancelModal(false)}
+            >
+              No, Keep Order
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
