@@ -37,9 +37,22 @@ export const getReviewsByProductId = async (
 
 // Crear una nueva reseña
 export const createReview = async (reviewData: Partial<Review>) => {
-  const response = await axios.post(`${API_URL}/api/review`, reviewData, {
+  const userId = localStorage.getItem("user_id");
+
+  if (!userId) {
+    console.error("Error: No se encontró un user_id en localStorage.");
+    throw new Error("El usuario no está autenticado.");
+  }
+
+  const requestData = {
+    ...reviewData,
+    user_id: parseInt(userId),
+  };
+
+  const response = await axios.post(`${API_URL}/api/review`, requestData, {
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
 
@@ -51,11 +64,15 @@ export const updateReview = async (
   reviewId: number,
   updatedData: Partial<Review>
 ) => {
-  const response = await axios.patch(`${API_URL}/api/review/${reviewId}`, updatedData, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const response = await axios.patch(
+    `${API_URL}/api/review/${reviewId}`,
+    updatedData,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   return response.data;
 };

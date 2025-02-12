@@ -7,7 +7,9 @@ import { useRouter } from "next/router";
 const ProductDetail = dynamic(() => import("products/ProductDetail"), {
   ssr: false,
 });
-
+const AttributesList = dynamic(() => import("attributes/AttributesList"), {
+  ssr: false,
+});
 const ReviewsList = dynamic(() => import("reviews/ReviewsList"), {
   ssr: false,
 });
@@ -31,7 +33,7 @@ const ProductDetailPage = () => {
       <Header />
       {/* Pasar el ID como prop a cada componente */}
       <ProductDetail productId={productId} />
-      {/* <AttributesList productId={productId} /> */}
+      <AttributesList productId={productId} />
       <ReviewsList productId={productId} />
       <ProductsList title="Productos Relacionados" />
       <Footer />

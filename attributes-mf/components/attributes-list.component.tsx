@@ -1,18 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { getAttributesByProductId } from "@/services/attribute.service";
 import styles from "@/styles/attributes.module.css";
+import { getAttributesByProductId } from "@/services/attributes.service";
 
-const AttributesList = ({ productId }: { productId: number }) => {
-  const [attributes, setAttributes] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+interface Attribute {
+  attribute_id: number;
+  attribute_name: string;
+  value: string;
+}
+
+interface AttributesListProps {
+  productId: number;
+}
+
+const AttributesList: React.FC<AttributesListProps> = ({ productId }) => {
+  const [attributes, setAttributes] = useState<Attribute[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAttributes = async () => {
       try {
-        const data = await getAttributesByProductId(productId); // Llamada al servicio
+        setLoading(true);
+        setError(null); // Reinicia el error en cada solicitud
+
+        const data = await getAttributesByProductId(productId);
         setAttributes(data);
       } catch (error) {
         console.error("Error al obtener los atributos:", error);
+        setError("Hubo un problema al cargar los atributos.");
       } finally {
         setLoading(false);
       }
@@ -25,7 +40,11 @@ const AttributesList = ({ productId }: { productId: number }) => {
     return <p>Cargando atributos...</p>;
   }
 
-  if (!attributes.length) {
+  if (error) {
+    return <p className={styles["error-message"]}>{error}</p>;
+  }
+
+  if (attributes.length === 0) {
     return <p>No hay atributos disponibles para este producto.</p>;
   }
 

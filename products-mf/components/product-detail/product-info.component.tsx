@@ -1,6 +1,7 @@
 interface ProductInfoProps {
   title: string;
   rating: number;
+  reviews: number;
   stock: boolean;
   price: number;
   description: string;
@@ -9,6 +10,7 @@ interface ProductInfoProps {
 const ProductInfo = ({
   title,
   rating,
+  reviews,
   stock,
   price,
   description,
@@ -24,6 +26,7 @@ const ProductInfo = ({
       </p>
       <h3 className="fw-bold text-danger">${price.toFixed(2)}</h3>
       <p className="mt-3">{description}</p>
+      <p className="d-none"> {reviews}</p>
     </div>
   );
 };
