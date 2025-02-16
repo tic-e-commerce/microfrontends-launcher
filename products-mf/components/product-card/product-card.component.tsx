@@ -6,11 +6,23 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { Product } from "@/models/Product";
+import { getAverageRatingByProductId } from "@/services/products.service";
 import styles from "./product-card.module.css";
 
 const ProductCard = ({ product }: { product: Product }) => {
   const router = useRouter();
+  const [averageRating, setAverageRating] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchAverageRating = async () => {
+      const rating = await getAverageRatingByProductId(product.product_id);
+      setAverageRating(rating);
+    };
+
+    fetchAverageRating();
+  }, [product.product_id]);
 
   const handleProductClick = () => {
     router.push(`/products/${product.product_id}`);
@@ -29,13 +41,28 @@ const ProductCard = ({ product }: { product: Product }) => {
 
       {/* Botones de acción */}
       <div className="position-absolute top-0 end-0 d-flex flex-column m-2">
-        <button className="btn btn-light btn-sm mb-1 rounded-circle shadow">
+        <button
+          className={
+            styles["action-button"] +
+            " btn btn-light btn-sm mb-1 rounded-circle shadow"
+          }
+        >
           <FontAwesomeIcon icon={faHeart} />
         </button>
-        <button className="btn btn-light btn-sm mb-1 rounded-circle shadow">
+        <button
+          className={
+            styles["action-button"] +
+            " btn btn-light btn-sm mb-1 rounded-circle shadow"
+          }
+        >
           <FontAwesomeIcon icon={faEye} />
         </button>
-        <button className="btn btn-primary btn-sm rounded-circle shadow">
+        <button
+          className={
+            styles["action-button-danger"] +
+            " btn btn-light btn-sm mb-1 rounded-circle shadow"
+          }
+        >
           <FontAwesomeIcon icon={faShoppingCart} />
         </button>
       </div>
@@ -69,19 +96,28 @@ const ProductCard = ({ product }: { product: Product }) => {
           )}
         </p>
 
-        {/* Rating */}
+        {/* Rating basado en la API */}
         <div className="mb-2">
-          {Array.from({ length: 5 }, (_, index) => (
-            <FontAwesomeIcon
-              key={index}
-              icon={faStar}
-              className={
-                index < Math.floor(product.rating ?? 0)
-                  ? "text-warning"
-                  : "text-secondary"
-              }
-            />
-          ))}
+          {averageRating !== null ? (
+            <>
+              {Array.from({ length: 5 }, (_, index) => (
+                <FontAwesomeIcon
+                  key={index}
+                  icon={faStar}
+                  className={
+                    index < Math.round(averageRating)
+                      ? "text-warning"
+                      : "text-secondary"
+                  }
+                />
+              ))}
+              <span className="ms-2 text-muted">
+                ({averageRating.toFixed(1)})
+              </span>
+            </>
+          ) : (
+            <span className="text-muted">Sin calificaciones</span>
+          )}
         </div>
       </div>
     </div>

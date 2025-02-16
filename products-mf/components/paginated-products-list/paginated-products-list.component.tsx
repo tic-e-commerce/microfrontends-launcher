@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Product } from "@/models";
 import ProductCard from "../product-card/product-card.component";
 import styles from "./paginated-products-list.module.css";
-import { getProducts } from "@/services/products.service";
+import {
+  getProducts,
+  getAllAttributes,
+  getAttributesByProductId,
+} from "@/services/products.service";
 
 interface PaginatedProductsListProps {
   title?: string;
@@ -12,14 +16,18 @@ const PaginatedProductsList = ({ title }: PaginatedProductsListProps) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc" | "none">("none");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
-  const PRODUCTS_PER_PAGE = 10; // Productos por página
+  // Atributos
+  const [attributes, setAttributes] = useState<
+    { attribute_id: number; attribute_name: string }[]
+  >([]);
+  const [selectedAttribute, setSelectedAttribute] = useState<string>("all");
 
+  const PRODUCTS_PER_PAGE = 10; // Productos por página
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -34,41 +42,69 @@ const PaginatedProductsList = ({ title }: PaginatedProductsListProps) => {
       }
     };
 
+    const fetchAttributes = async () => {
+      try {
+        const attributesList = await getAllAttributes();
+        setAttributes(attributesList);
+      } catch (error) {
+        console.error("Error fetching attributes:", error);
+      }
+    };
+
     fetchProducts();
+    fetchAttributes();
   }, []);
 
   // Lógica de filtrado y ordenamiento
   useEffect(() => {
-    let filtered = [...products];
+    const filterProducts = async () => {
+      let filtered = [...products];
 
-    // Filtrar por categoría
-    if (selectedCategory !== "all") {
+      // Filtrar por rango de precios
       filtered = filtered.filter(
-        (product) => product.category_id === Number(selectedCategory)
+        (product) =>
+          product.price >= priceRange[0] && product.price <= priceRange[1]
       );
-    }
 
-    // Filtrar por rango de precios
-    filtered = filtered.filter(
-      (product) =>
-        product.price >= priceRange[0] && product.price <= priceRange[1]
-    );
+      // Filtrar por búsqueda
+      filtered = filtered.filter((product) =>
+        product.product_name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
 
-    // Filtrar por búsqueda
-    filtered = filtered.filter((product) =>
-      product.product_name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+      // Filtrar por atributo seleccionado
+      if (selectedAttribute !== "all") {
+        const filteredByAttribute = await Promise.all(
+          filtered.map(async (product) => {
+            const productAttributes = await getAttributesByProductId(
+              product.product_id
+            );
+            return productAttributes.some(
+              (attr: { attribute_id: number }) =>
+                attr.attribute_id === Number(selectedAttribute)
+            )
+              ? product
+              : null;
+          })
+        );
 
-    // Ordenar por precio
-    if (sortOrder === "asc") {
-      filtered.sort((a, b) => a.price - b.price);
-    } else if (sortOrder === "desc") {
-      filtered.sort((a, b) => b.price - a.price);
-    }
+        filtered = filteredByAttribute.filter(
+          (product) => product !== null
+        ) as Product[];
+      }
 
-    setFilteredProducts(filtered);
-    setCurrentPage(1); // Reinicia la página al cambiar filtros u ordenamiento
-  }, [products, selectedCategory, priceRange, searchQuery, sortOrder]);
+      // Ordenar por precio
+      if (sortOrder === "asc") {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (sortOrder === "desc") {
+        filtered.sort((a, b) => b.price - a.price);
+      }
+
+      setFilteredProducts(filtered);
+      setCurrentPage(1); // Reinicia la página al cambiar filtros u ordenamiento
+    };
+
+    filterProducts();
+  }, [products, priceRange, searchQuery, sortOrder, selectedAttribute]);
 
   // Calcular los productos de la página actual
   const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
@@ -108,19 +144,6 @@ const PaginatedProductsList = ({ title }: PaginatedProductsListProps) => {
           />
         </div>
         <div className="col-md-4">
-          <label className="form-label">Atributos</label>
-          <select
-            className="form-select"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-          >
-            <option value="all">All Categories</option>
-            <option value="1">Category 1</option>
-            <option value="2">Category 2</option>
-            {/* Agrega más categorías según sea necesario */}
-          </select>
-        </div>
-        <div className="col-md-4">
           <label className="form-label">Rango de precio</label>
           <div className="d-flex align-items-center">
             <input
@@ -143,22 +166,23 @@ const PaginatedProductsList = ({ title }: PaginatedProductsListProps) => {
             />
           </div>
         </div>
-      </div>
-
-      {/* Controles de ordenamiento */}
-      <div className="mb-4">
-        <label className="form-label">Ordenar por precio</label>
-        <select
-          className="form-select"
-          value={sortOrder}
-          onChange={(e) =>
-            setSortOrder(e.target.value as "asc" | "desc" | "none")
-          }
-        >
-          <option value="none">None</option>
-          <option value="asc">Ascendente</option>
-          <option value="desc">Descendente</option>
-        </select>
+        {/* Filtrar por atributos */}
+        <div className="col-md-4">
+          <label className="form-label">Filtrar por atributo</label>
+          <select
+            className="form-select pb-3 pt-2"
+            value={selectedAttribute}
+            onChange={(e) => setSelectedAttribute(e.target.value)}
+          >
+            <option key="all" value="all">
+            </option>
+            {attributes.map((attr) => (
+              <option key={attr.attribute_id} value={attr.attribute_id}>
+                {attr.attribute_name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Lista de productos */}
