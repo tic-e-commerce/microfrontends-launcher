@@ -20,13 +20,13 @@ const ProductInfo = ({
       <h2 className="fw-bold">{title}</h2>
       <div className="rating mb-3">
         <span className="text-warning">{`⭐`.repeat(Math.floor(rating))}</span>
-        <span className="text-muted ms-2">{`(${reviews} Reviews)`}</span>
       </div>
       <p className={`stock-status ${stock ? "text-success" : "text-danger"}`}>
-        {stock ? "In Stock" : "Out of Stock"}
+        {stock ? "En stock" : "Agotado"}
       </p>
       <h3 className="fw-bold text-danger">${price.toFixed(2)}</h3>
       <p className="mt-3">{description}</p>
+      <p className="d-none"> {reviews}</p>
     </div>
   );
 };

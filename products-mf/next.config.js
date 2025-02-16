@@ -38,6 +38,7 @@ const nextConfig = {
         exposes: {
           "./ProductsList": "./components/products-list/products-list.component.tsx",
           "./ProductDetail": "./components/product-detail/product-detail.component.tsx",
+          "./PaginatedProductsList": "./components/paginated-products-list/paginated-products-list.component.tsx"
         },
         extraOptions: {
           exposePages: true,

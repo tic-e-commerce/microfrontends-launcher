@@ -1,0 +1,26 @@
+.product-card-title {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.product-card-title:hover {
+  text-decoration: underline; /* Añade subrayado al pasar el ratón */
+}
+
+.action-button {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-button-danger {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(220 53 69);
+}
