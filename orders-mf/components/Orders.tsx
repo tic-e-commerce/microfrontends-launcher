@@ -4,6 +4,7 @@ import { createOrder, getOrder, cancelOrder } from "@/services/orders.service";
 import { OrderDetails } from "@/interfaces/order-details.interface";
 import OrderDetailsComponent from "./OrderDetails";
 import OrderSummary from "./OrderSummary";
+import CancelOrderModal from "./CancelOrderModal"; // Nuevo componente separado
 
 const Orders: React.FC = () => {
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
@@ -39,29 +40,20 @@ const Orders: React.FC = () => {
               existingOrder.data.status === "EXPIRED" ||
               existingOrder.data.status === "CANCELLED"
             ) {
-              console.log(
-                `Order ${storedOrderId} is ${existingOrder.data.status}, creating a new order.`
-              );
               localStorage.removeItem("order_id");
               storedOrderId = null;
             } else {
-              console.log(`Using existing order: ${storedOrderId}`);
               setOrderDetails(existingOrder.data);
               setLoading(false);
               return;
             }
           } catch (error) {
-            console.warn(
-              `Could not fetch previous order ${storedOrderId}:`,
-              error
-            );
             localStorage.removeItem("order_id");
             storedOrderId = null;
           }
         }
 
         if (!storedOrderId) {
-          console.log("Creating a new order...");
           const createOrderDto = { user_id: parseInt(userId, 10) };
           const response = await createOrder(createOrderDto, token);
           const newOrderId = response.data.order_id;
@@ -72,7 +64,6 @@ const Orders: React.FC = () => {
           setOrderDetails(orderDetailsResponse.data);
         }
       } catch (err) {
-        console.error("Error creating or fetching order:", err);
         setError("Failed to create or fetch order.");
       } finally {
         setLoading(false);
@@ -99,14 +90,24 @@ const Orders: React.FC = () => {
 
       router.push("/cart");
     } catch (err) {
-      console.error("Error cancelling order:", err);
       setError("Failed to cancel order.");
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return (
+    <div className="loading-overlay">
+      <div className="loading-content">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading order details...</span>
+        </div>
+        <p className="loading-text">We are retrieving your order details. Please wait...</p>
+      </div>
+    </div>
+  );
+  
   if (error) return <div className="alert alert-danger">{error}</div>;
-  if (!orderDetails) return <p>No order details available.</p>;
+  if (!orderDetails) return <div className="alert alert-warning">No order details available.</div>;
+  
 
   return (
     <div className="orders-wrapper mt-5">
@@ -114,9 +115,7 @@ const Orders: React.FC = () => {
         <div className="card order-details shadow-sm border-0">
           <div className="card-body">
             <h5 className="card-title">Order Details</h5>
-            <OrderDetailsComponent
-              orderItems={orderDetails.order_items ?? []}
-            />
+            <OrderDetailsComponent orderItems={orderDetails.order_items ?? []} />
             <OrderSummary
               subtotal={orderDetails.subtotal ?? orderDetails.total_amount}
               shippingCost={orderDetails.shipping_cost ?? 0}
@@ -129,34 +128,17 @@ const Orders: React.FC = () => {
               }
               total={orderDetails.total ?? orderDetails.total_amount}
             />
-            {/* Botón para abrir el modal de cancelación */}
-            <button
-              className="btn btn-secondary btn-cancel-order"
-              onClick={() => setShowCancelModal(true)}
-            >
+            <button className="btn btn-secondary btn-cancel-order" onClick={() => setShowCancelModal(true)}>
               Cancel Order
             </button>
           </div>
         </div>
       </div>
-
-      {/* Modal de confirmación de cancelación */}
       {showCancelModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h4>Are you sure you want to cancel this order?</h4>
-            <p>Your selected items will remain in your cart.</p>
-            <button className="btn btn-danger" onClick={handleCancelOrder}>
-              Yes, Cancel Order
-            </button>
-            <button
-              className="btn btn-secondary"
-              onClick={() => setShowCancelModal(false)}
-            >
-              No, Keep Order
-            </button>
-          </div>
-        </div>
+        <CancelOrderModal
+          onClose={() => setShowCancelModal(false)}
+          onConfirm={handleCancelOrder}
+        />
       )}
     </div>
   );
