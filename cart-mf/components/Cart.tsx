@@ -27,19 +27,23 @@ const Cart: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = localStorage.getItem("token");
+    const storedUserId = localStorage.getItem("user_id");
+    const storedToken = localStorage.getItem("token");
 
-      if (!storedToken) {
-        setError("Authorization token not found.");
-        setTimeout(() => router.push("/login"), 500);
-        return;
-      }
-
-      setToken(storedToken);
-      setIsAuthenticated(true);
+    if (!storedUserId || !storedToken) {
+      isUnauthorized();
+      return;
     }
-  }, [router]);
+
+    setToken(storedToken);
+    setIsAuthenticated(true);
+  }, []);
+
+  const isUnauthorized = () => {
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("token");
+    router.push("/login");
+  };
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -48,6 +52,11 @@ const Cart: React.FC = () => {
       setLoading(true);
       try {
         const response = await getCartByUserId(token as string);
+
+        if (response.status === 401) {
+          isUnauthorized();
+          return;
+        }
 
         if (!response.data) {
           setError("Failed to fetch cart items.");
@@ -62,8 +71,12 @@ const Cart: React.FC = () => {
         setShippingCost(shipping_cost ?? 0);
         setSubtotal(subtotal ?? 0);
         setTotal(total ?? subtotal + (shipping_cost ?? 0));
-      } catch (err) {
-        setError("Failed to fetch cart items.");
+      } catch (err: any) {
+        if (err.response?.status === 401) {
+          isUnauthorized();
+        } else {
+          setError("Failed to fetch cart items.");
+        }
       } finally {
         setLoading(false);
       }
@@ -98,6 +111,11 @@ const Cart: React.FC = () => {
         )
       );
     } catch (err: any) {
+      if (err.response?.status === 401) {
+        isUnauthorized();
+        return;
+      }
+
       const product = cartItems.find((item) => item.product_id === product_id);
       setError(
         err.response?.data?.message ||
@@ -118,7 +136,12 @@ const Cart: React.FC = () => {
       );
       setSuccess("Product removed from cart.");
       setTimeout(() => setSuccess(null), 2000);
-    } catch (err) {
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        isUnauthorized();
+        return;
+      }
+
       setError("Failed to remove item.");
       setTimeout(() => setError(null), 2000);
     }
@@ -133,6 +156,12 @@ const Cart: React.FC = () => {
       await setShippingMethod({ shipping_method: selectedMethod }, token);
 
       const response = await getCartByUserId(token);
+
+      if (response.status === 401) {
+        isUnauthorized();
+        return;
+      }
+
       const { cart, shipping_method, shipping_cost, subtotal, total } =
         response.data;
 
@@ -141,7 +170,11 @@ const Cart: React.FC = () => {
       setShippingCost(shipping_cost ?? 0);
       setSubtotal(subtotal ?? 0);
       setTotal(total ?? subtotal + (shipping_cost ?? 0));
-    } catch (err) {
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        isUnauthorized();
+        return;
+      }
       setError("Failed to update shipping method.");
     }
   };
