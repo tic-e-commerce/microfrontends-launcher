@@ -1,18 +1,17 @@
 .container {
   display: flex;
-  gap: 20px; /* Espacio entre las columnas */
+  gap: 20px; 
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .leftColumn {
-  flex: 2; /* El formulario ocupará más espacio */
+  flex: 2; 
 }
 
 .rightColumn {
-  flex: 1; /* Los detalles ocuparán menos espacio */
+  flex: 1; 
 }
-
 
 .breadcrumb a {
   text-decoration: none !important;

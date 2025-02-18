@@ -2,7 +2,6 @@ import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-// Crear sesión de pago
 export const createPaymentSession = async (
   paymentData: {
     user_id: string;
@@ -13,7 +12,7 @@ export const createPaymentSession = async (
       last_name: string;
       address: string;
       city: string;
-      phone_number: string;
+      phone_number: string; 
     };
   },
   token: string
@@ -21,6 +20,22 @@ export const createPaymentSession = async (
   return axios.post(`${API_URL}/api/payments/create-payment-session`, paymentData, {
     headers: {
       Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const getPaymentSuccess = async () => {
+  return axios.get(`${API_URL}/api/payments/success`, {
+    headers: {
+      "ngrok-skip-browser-warning": "true",
+    },
+  });
+};
+
+export const getPaymentCancel = async () => {
+  return axios.get(`${API_URL}/api/payments/cancel`, {
+    headers: {
+      "ngrok-skip-browser-warning": "true",
     },
   });
 };
