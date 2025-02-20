@@ -37,6 +37,7 @@ const nextConfig = {
         remotes: remotes(options.isServer),
         exposes: {
           "./Orders": "./components/Orders.tsx",
+          "./PaidOrders": "./components/PaidOrders.tsx",
         },
         extraOptions: {
           exposePages: true,

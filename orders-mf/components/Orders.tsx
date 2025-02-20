@@ -240,7 +240,7 @@ const Orders: React.FC = () => {
                   👉 <strong>Please reload the page to create a new order and continue.</strong>
                 </p>
                 <button
-                  className="custom-btn custom-btn-primary text-white mt-2 px-4 py-2"
+                  className="custom-btn custom-btn-danger text-white mt-2 px-4 py-2"
                   onClick={() => window.location.reload()}
                 >
                   🔄 Create New Order
