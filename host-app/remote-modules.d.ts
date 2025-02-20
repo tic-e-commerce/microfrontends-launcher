@@ -65,6 +65,16 @@ declare module "payments/Payments" {
   export default Payments;
 }
 
+declare module "payments/PaymentSuccess" {
+  const PaymentSuccess: React.ComponentType;
+  export default PaymentSuccess;
+}
+
+declare module "payments/PaymentCancel" {
+  const PaymentCancel: React.ComponentType;
+  export default PaymentCancel;
+}
+
 // ***PRODUCTS MODULE***
 
 declare module "products/ProductsList" {
