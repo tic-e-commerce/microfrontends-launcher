@@ -31,3 +31,4 @@ const PaymentCard: React.FC<PaymentCardProps> = ({
 };
 
 export default PaymentCard;
+

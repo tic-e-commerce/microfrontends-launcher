@@ -228,3 +228,16 @@
   font-size: 1.2rem;
   color: #333;
 }
+
+.order-details-container {
+  position: relative;
+  overflow-y: auto; 
+  max-height: none; 
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 10px;
+}
