@@ -7,15 +7,15 @@ interface CancelOrderModalProps {
 
 const CancelOrderModal: React.FC<CancelOrderModalProps> = ({ onClose, onConfirm }) => {
   return (
-    <div className="modal-overlay">
-      <div className="modal-container">
-        <h4 className="modal-title">Are you sure you want to cancel this order?</h4>
-        <p className="modal-text">Your selected items will remain in your cart.</p>
-        <div className="modal-buttons">
-          <button className="btn btn-danger" onClick={onConfirm}>
+    <div className="custom-modal-overlay">
+      <div className="custom-modal-container">
+        <h4 className="custom-modal-title">Are you sure you want to cancel this order?</h4>
+        <p className="custom-modal-text">Your selected items will remain in your cart.</p>
+        <div className="custom-modal-buttons">
+          <button className="custom-btn custom-btn-danger" onClick={onConfirm}>
             Yes, Cancel Order
           </button>
-          <button className="btn btn-secondary" onClick={onClose}>
+          <button className="custom-btn custom-btn-secondary" onClick={onClose}>
             No, Keep Order
           </button>
         </div>
