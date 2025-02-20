@@ -33,7 +33,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onShowModal }) => {
         "full_name",
         `${response.data.user.first_name} ${response.data.user.last_name}`
       );
-      router.push("/shop");
+      router.push("/products");
     } catch (err: any) {
       if (Array.isArray(err.response?.data?.message)) {
         const messages = err.response?.data?.message.join(", ");

@@ -6,15 +6,19 @@ import { useRouter } from "next/router";
 
 const ProductDetail = dynamic(() => import("products/ProductDetail"), {
   ssr: false,
+  loading: () => <p>Loading component product detail...</p>,
 });
 const AttributesList = dynamic(() => import("attributes/AttributesList"), {
   ssr: false,
+  loading: () => <p>Loading component attributes list ...</p>,
 });
 const ReviewsList = dynamic(() => import("reviews/ReviewsList"), {
   ssr: false,
+  loading: () => <p>Loading component reviews list...</p>,
 });
 const ProductsList = dynamic(() => import("products/ProductsList"), {
   ssr: false,
+  loading: () => <p>Loading component products list...</p>,
 });
 
 const ProductDetailPage = () => {

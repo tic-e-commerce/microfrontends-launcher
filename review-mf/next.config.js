@@ -36,6 +36,7 @@ const nextConfig = {
         filename: "static/chunks/remoteEntry.js",
         remotes: remotes(options.isServer),
         exposes: {
+          "./HealthCheck": "./components/health.component.tsx",
           "./ReviewsList": "./components/review-list/review-list.component.tsx",
         },
         extraOptions: {

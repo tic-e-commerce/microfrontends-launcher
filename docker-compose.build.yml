@@ -1,96 +1,134 @@
 version: "3.8"
 
 services:
-  host-app:
-    build:
-      context: ./host-app
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_REMOTE_AUTH_URL: ${NEXT_PUBLIC_REMOTE_AUTH_URL}
-        NEXT_PUBLIC_REMOTE_PROFILE_URL: ${NEXT_PUBLIC_REMOTE_PROFILE_URL}
-        NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL: ${NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL}
-        NEXT_PUBLIC_REMOTE_CART_URL: ${NEXT_PUBLIC_REMOTE_CART_URL}
-        NEXT_PUBLIC_REMOTE_PRODUCTS_URL: ${NEXT_PUBLIC_REMOTE_PRODUCTS_URL}
-    image: us-central1-docker.pkg.dev/main-stack-446713-e6/frontend-tic/host-app:latest
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - NEXT_PUBLIC_REMOTE_AUTH_URL=${NEXT_PUBLIC_REMOTE_AUTH_URL}
-      - NEXT_PUBLIC_REMOTE_PROFILE_URL=${NEXT_PUBLIC_REMOTE_PROFILE_URL}
-      - NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL=${NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL}
-      - NEXT_PUBLIC_REMOTE_CART_URL=${NEXT_PUBLIC_REMOTE_CART_URL}
-      - NEXT_PUBLIC_REMOTE_PRODUCTS_URL=${NEXT_PUBLIC_REMOTE_PRODUCTS_URL}
-    command: npm run start
-  auth-mf:
-    build:
-      context: ./auth-mf
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
-    image: us-central1-docker.pkg.dev/main-stack-446713-e6/frontend-tic/auth-mf:latest
-    ports:
-      - "3001:3001"
-    environment:
-      - NODE_ENV=production
-      - HOST_APP_URL=${HOST_APP_URL}
-      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
-    command: npm run start
+  # host-app:
+  #   build:
+  #     context: ./host-app
+  #     dockerfile: Dockerfile
+  #     args:
+  #       NEXT_PUBLIC_REMOTE_AUTH_URL: ${NEXT_PUBLIC_REMOTE_AUTH_URL}
+  #       NEXT_PUBLIC_REMOTE_PROFILE_URL: ${NEXT_PUBLIC_REMOTE_PROFILE_URL}
+  #       NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL: ${NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL}
+  #       NEXT_PUBLIC_REMOTE_CART_URL: ${NEXT_PUBLIC_REMOTE_CART_URL}
+  #       NEXT_PUBLIC_REMOTE_PRODUCTS_URL: ${NEXT_PUBLIC_REMOTE_PRODUCTS_URL}
+  #       NEXT_PUBLIC_REMOTE_ORDERS_URL: ${NEXT_PUBLIC_REMOTE_ORDERS_URL}
+  #       NEXT_PUBLIC_REMOTE_PAYMENTS_URL: ${NEXT_PUBLIC_REMOTE_PAYMENTS_URL}
+  #       NEXT_PUBLIC_REMOTE_ATTRIBUTES_URL: ${NEXT_PUBLIC_REMOTE_ATTRIBUTES_URL}
+  #       NEXT_PUBLIC_REMOTE_REVIEWS_URL: ${NEXT_PUBLIC_REMOTE_REVIEWS_URL}
+  #   image: us-central1-docker.pkg.dev/main-stack-446713-e6/frontend-tic/host-app:latest
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - NEXT_PUBLIC_REMOTE_AUTH_URL=${NEXT_PUBLIC_REMOTE_AUTH_URL}
+  #     - NEXT_PUBLIC_REMOTE_PROFILE_URL=${NEXT_PUBLIC_REMOTE_PROFILE_URL}
+  #     - NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL=${NEXT_PUBLIC_REMOTE_USER_PREFERENCES_URL}
+  #     - NEXT_PUBLIC_REMOTE_CART_URL=${NEXT_PUBLIC_REMOTE_CART_URL}
+  #     - NEXT_PUBLIC_REMOTE_PRODUCTS_URL=${NEXT_PUBLIC_REMOTE_PRODUCTS_URL}
+  #     - NEXT_PUBLIC_REMOTE_ORDERS_URL=${NEXT_PUBLIC_REMOTE_ORDERS_URL}
+  #     - NEXT_PUBLIC_REMOTE_PAYMENTS_URL=${NEXT_PUBLIC_REMOTE_PAYMENTS_URL}
+  #     - NEXT_PUBLIC_REMOTE_ATTRIBUTES_URL=${NEXT_PUBLIC_REMOTE_ATTRIBUTES_URL}
+  #     - NEXT_PUBLIC_REMOTE_REVIEWS_URL=${NEXT_PUBLIC_REMOTE_REVIEWS_URL}
+  #   command: npm run start
+  # auth-mf:
+  #   build:
+  #     context: ./auth-mf
+  #     dockerfile: Dockerfile
+  #     args:
+  #       NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+  #   image: us-central1-docker.pkg.dev/main-stack-446713-e6/frontend-tic/auth-mf:latest
+  #   ports:
+  #     - "3001:3001"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - HOST_APP_URL=${HOST_APP_URL}
+  #     - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+  #   command: npm run start
 
-  profile-mf:
-    build:
-      context: ./profile-mf
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
-    image: us-central1-docker.pkg.dev/main-stack-446713-e6/frontend-tic/profile-mf:latest
-    ports:
-      - "3002:3002"
-    environment:
-      - NODE_ENV=production
-      - HOST_APP_URL=${HOST_APP_URL}
-      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
-    command: npm run start
+  # profile-mf:
+  #   build:
+  #     context: ./profile-mf
+  #     dockerfile: Dockerfile
+  #     args:
+  #       NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+  #   image: us-central1-docker.pkg.dev/main-stack-446713-e6/frontend-tic/profile-mf:latest
+  #   ports:
+  #     - "3002:3002"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - HOST_APP_URL=${HOST_APP_URL}
+  #     - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+  #   command: npm run start
 
-  user-preferences-mf:
-    build:
-      context: ./user-preferences-mf
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
-    image: us-central1-docker.pkg.dev/main-stack-446713-e6/frontend-tic/user-preferences-mf:latest
-    ports:
-      - "3003:3003"
-    environment:
-      - NODE_ENV=production
-      - HOST_APP_URL=${HOST_APP_URL}
-      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
-    command: npm run start
+  # user-preferences-mf:
+  #   build:
+  #     context: ./user-preferences-mf
+  #     dockerfile: Dockerfile
+  #     args:
+  #       NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+  #   image: us-central1-docker.pkg.dev/main-stack-446713-e6/frontend-tic/user-preferences-mf:latest
+  #   ports:
+  #     - "3003:3003"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - HOST_APP_URL=${HOST_APP_URL}
+  #     - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+  #   command: npm run start
 
-  cart-mf:
-    build:
-      context: ./cart-mf
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
-    image: us-central1-docker.pkg.dev/main-stack-446713-e6/frontend-tic/cart-mf:latest
-    ports:
-      - "3004:3004"
-    environment:
-      - NODE_ENV=production
-      - HOST_APP_URL=${HOST_APP_URL}
-      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
-    command: npm run start
+  # cart-mf:
+  #   build:
+  #     context: ./cart-mf
+  #     dockerfile: Dockerfile
+  #     args:
+  #       NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+  #   image: us-central1-docker.pkg.dev/main-stack-446713-e6/frontend-tic/cart-mf:latest
+  #   ports:
+  #     - "3004:3004"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - HOST_APP_URL=${HOST_APP_URL}
+  #     - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+  #   command: npm run start
 
-  products-mf:
+  # products-mf:
+  #   build:
+  #     context: ./products-mf
+  #     dockerfile: Dockerfile
+  #     args:
+  #       NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+  #   image: us-central1-docker.pkg.dev/main-stack-446713-e6/frontend-tic/products-mf:latest
+  #   ports:
+  #     - "3005:3005"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - HOST_APP_URL=${HOST_APP_URL}
+  #     - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+  #   command: npm run start
+
+  # review-mf:
+  #   build:
+  #     context: ./review-mf
+  #     dockerfile: Dockerfile
+  #     args:
+  #       NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+  #   image: us-central1-docker.pkg.dev/main-stack-446713-e6/frontend-tic/review-mf:latest
+  #   ports:
+  #     - "3009:3009"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - HOST_APP_URL=${HOST_APP_URL}
+  #     - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+  #   command: npm run start
+
+  attributes-mf:
     build:
-      context: ./products-mf
+      context: ./attributes-mf
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
-    image: us-central1-docker.pkg.dev/main-stack-446713-e6/frontend-tic/products-mf:latest
+    image: us-central1-docker.pkg.dev/main-stack-446713-e6/frontend-tic/attributes-mf:latest
     ports:
-      - "3005:3005"
+      - "3008:3008"
     environment:
       - NODE_ENV=production
       - HOST_APP_URL=${HOST_APP_URL}
