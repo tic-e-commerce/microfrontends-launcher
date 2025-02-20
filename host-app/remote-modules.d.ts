@@ -65,26 +65,50 @@ declare module "payments/Payments" {
   export default Payments;
 }
 
+declare module "payments/PaymentSuccess" {
+  const PaymentSuccess: React.ComponentType;
+  export default PaymentSuccess;
+}
+
+declare module "payments/PaymentCancel" {
+  const PaymentCancel: React.ComponentType;
+  export default PaymentCancel;
+}
+
 // ***PRODUCTS MODULE***
 
 declare module "products/ProductsList" {
   interface ProductsListProps {
     title: string;
-    products?: any[];
   }
   const ProductsList: React.ComponentType<ProductsListProps>;
   export default ProductsList;
 }
 
 declare module "products/ProductDetail" {
-  const ProductDetail: React.ComponentType;
+  interface ProductDetailProps {
+    productId?: number;
+  }
+  const ProductDetail: React.ComponentType<ProductDetailProps>;
   export default ProductDetail;
+}
+
+declare module "products/PaginatedProductsList" {
+  interface PaginatedProductsListProps {
+    title?: string;
+    productId?: number;
+  }
+  const PaginatedProductsList: React.ComponentType<PaginatedProductsListProps>;
+  export default PaginatedProductsList;
 }
 
 // ***ATTRIBUTES MODULE***
 
 declare module "attributes/AttributesList" {
-  const AttributesList: React.ComponentType;
+  interface AttributesListProps {
+    productId?: number;
+  } 
+  const AttributesList: React.ComponentType<AttributesListProps>;
   export default AttributesList;
 }
 
@@ -93,6 +117,9 @@ declare module "attributes/AttributesList" {
 // ***REVIEWS MODULE***
 
 declare module "reviews/ReviewsList" {
-  const ReviewsList: React.ComponentType;
+  interface ReviewsListProps {
+    productId?: number;
+  }
+  const ReviewsList: React.ComponentType<ReviewsListProps>;
   export default ReviewsList;
 }

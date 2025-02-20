@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { createPaymentSession } from "@/services/payments.service";
+import { createPaymentSession, getPaymentSuccess, getPaymentCancel } from "@/services/payments.service";
 import { useRouter } from "next/router";
+import BillingForm from "./BillingForm";
+import PaymentCard from "./PaymentCard";
 
 const Payments: React.FC = () => {
   const [order_id, setOrderId] = useState<string | null>(null);
   const [user_id, setUserId] = useState<string | null>(null);
+  const [orderExpired, setOrderExpired] = useState<boolean>(false); 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState({
@@ -14,21 +17,28 @@ const Payments: React.FC = () => {
     city: "",
     phoneNumber: "",
   });
+
   const [formErrors, setFormErrors] = useState({
     firstName: false,
     address: false,
     city: false,
     phoneNumber: false,
   });
+
   const [isTouched, setIsTouched] = useState({
     firstName: false,
+    lastName: false,
     address: false,
     city: false,
     phoneNumber: false,
   });
-  const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const router = useRouter();
+
+  useEffect(() => {
+    validateForm();
+  }, [formData]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -50,40 +60,15 @@ const Payments: React.FC = () => {
 
     const interval = setInterval(() => {
       const storedOrderId = localStorage.getItem("order_id");
-      if (storedOrderId && storedOrderId !== order_id) {
-        console.log("Updating order_id:", storedOrderId);
+      const storedOrderStatus = localStorage.getItem("order_status"); 
+      if (storedOrderId) {
         setOrderId(storedOrderId);
-        clearInterval(interval);
+        setOrderExpired(storedOrderStatus === "EXPIRED");
       }
-    }, 500);
+    }, 3000); 
 
     return () => clearInterval(interval);
   }, [router, order_id]);
-
-  useEffect(() => {
-    validateForm();
-  }, [formData]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setFormData({ ...formData, [id]: value });
-
-    if (isTouched[id as keyof typeof isTouched]) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        [id]: value.trim() === "",
-      }));
-    }
-  };
-
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setIsTouched((prevTouched) => ({ ...prevTouched, [id]: true }));
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      [id]: value.trim() === "",
-    }));
-  };
 
   const validateForm = () => {
     const errors = {
@@ -96,22 +81,45 @@ const Payments: React.FC = () => {
     setIsFormValid(!Object.values(errors).includes(true));
   };
 
-  // 🔹 Asegurar que `order_id` es válido antes de procesar el pago
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+
+    if (id !== "lastName" && isTouched[id as keyof typeof isTouched]) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        [id]: value.trim() === "",
+      }));
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setIsTouched((prevTouched) => ({ ...prevTouched, [id]: true }));
+
+    if (id !== "lastName") {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        [id]: value.trim() === "",
+      }));
+    }
+  };
+
   const handleRedirectToStripe = async () => {
+    if (orderExpired) {
+      setError("⏰ This order has expired and cannot be paid.");
+      return;
+    }
+
     if (!isFormValid) {
       setError("Please fill in all required fields.");
       return;
     }
 
     const token = localStorage.getItem("token");
-    if (!token) {
-      setError("Authorization token not found.");
-      return;
-    }
-
     const currentOrderId = localStorage.getItem("order_id");
 
-    if (!currentOrderId) {
+    if (!token || !currentOrderId) {
       setError("No active order found.");
       return;
     }
@@ -119,6 +127,8 @@ const Payments: React.FC = () => {
     try {
       setError(null);
       setLoading(true);
+
+      const DYNAMIC_FRONTEND_URL = window.location.origin;
 
       const billingDetails = {
         first_name: formData.firstName,
@@ -133,9 +143,10 @@ const Payments: React.FC = () => {
         order_id: currentOrderId,
         currency: "usd",
         billing_details: billingDetails,
+        success_url: `${DYNAMIC_FRONTEND_URL}/payment-success`,
+        cancel_url: `${DYNAMIC_FRONTEND_URL}/payment-cancel`,
       };
 
-      console.log("Sending payment request:", paymentData);
       const response = await createPaymentSession(paymentData, token);
 
       if (response.data.url) {
@@ -158,64 +169,24 @@ const Payments: React.FC = () => {
       {loading && <div className="alert alert-info">Processing payment...</div>}
 
       {!order_id ? (
-        <div className="alert alert-warning">
-          Order is being prepared. Please wait...
-        </div>
+        <div className="skeleton-loader"></div>
       ) : (
         <div className="row">
           <div className="col-md-6 mx-auto">
-            <form>
-              {["firstName", "lastName", "address", "city", "phoneNumber"].map(
-                (field) => (
-                  <div key={field} className="mb-3">
-                    <label htmlFor={field} className="form-label">
-                      {field.replace(/([A-Z])/g, " $1").trim()}*
-                    </label>
-                    <input
-                      type={field === "phoneNumber" ? "tel" : "text"}
-                      className={`form-control ${
-                        isTouched[field as keyof typeof isTouched] &&
-                        formErrors[field as keyof typeof formErrors]
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      id={field}
-                      value={formData[field as keyof typeof formData]}
-                      onChange={handleInputChange}
-                      onBlur={handleBlur}
-                      required
-                    />
-                    {isTouched[field as keyof typeof isTouched] &&
-                      formErrors[field as keyof typeof formErrors] && (
-                        <div className="invalid-feedback">
-                          {`${field
-                            .replace(/([A-Z])/g, " $1")
-                            .trim()} is required.`}
-                        </div>
-                      )}
-                  </div>
-                )
-              )}
-            </form>
+            <BillingForm
+              formData={formData}
+              formErrors={formErrors}
+              isTouched={isTouched}
+              handleInputChange={handleInputChange}
+              handleBlur={handleBlur}
+              disabled={orderExpired} 
+            />
             <hr />
-            <div className="card border-danger">
-              <div className="card-body">
-                <h5 className="card-title text-danger">Payment with Stripe</h5>
-                <p className="card-text">
-                  You will be redirected to Stripe website to complete your
-                  purchase securely.
-                </p>
-              </div>
-            </div>
-            <div className="mt-3">
-              <button
-                className="btn btn-primary w-100"
-                onClick={handleRedirectToStripe}
-                disabled={!isFormValid || loading}
-              >
-                Proceed to Stripe
-              </button>
-            </div>
+            <PaymentCard
+              handleRedirectToStripe={handleRedirectToStripe}
+              isFormValid={isFormValid && !orderExpired} 
+              loading={loading}
+            />
           </div>
         </div>
       )}

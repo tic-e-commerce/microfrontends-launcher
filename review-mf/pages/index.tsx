@@ -5,7 +5,7 @@ const Home = () => {
     <div>
       <h1>Product Details</h1>
       {/* Otras secciones del producto */}
-      <ReviewsList productId={1} />
+      <ReviewsList productId={12} />
     </div>
   );
 };

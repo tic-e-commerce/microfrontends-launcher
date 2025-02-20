@@ -1,23 +1,18 @@
+import styles from "./styles.module.css";
+
 interface ProductImagesProps {
-  images: string[];
+  mainImage: string;
 }
 
-const ProductImages = ({ images }: ProductImagesProps) => {
+const ProductImages = ({ mainImage }: ProductImagesProps) => {
   return (
-    <div className="product-images">
-      <div className="main-image mb-4">
-        <img src={images[0]} alt="Main product" className="img-fluid" />
-      </div>
-      <div className="thumbnail-images d-flex gap-2">
-        {images.map((image, index) => (
-          <img
-            key={index}
-            src={image}
-            alt={`Thumbnail ${index + 1}`}
-            className="img-thumbnail"
-            style={{ width: "80px", cursor: "pointer" }}
-          />
-        ))}
+    <div className={`${styles.productImages}`}>
+      <div className={styles.mainImage}>
+        <img
+          src={mainImage}
+          alt="Imagen principal del producto"
+          className="img-fluid"
+        />
       </div>
     </div>
   );

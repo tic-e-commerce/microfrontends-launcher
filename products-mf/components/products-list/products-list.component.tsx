@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Product } from "@/models";
 import ProductCard from "../product-card/product-card.component";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -5,18 +6,36 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import styles from "./products-list.module.css";
+import { getProducts } from "@/services/products.service";
 
 interface ProductsListProps {
   title: string;
-  products: Product[];
   showViewAllButton?: boolean; // Nueva prop
 }
 
-const ProductsList = ({
-  title,
-  products,
-  showViewAllButton = true, // Valor por defecto: true
-}: ProductsListProps) => {
+const ProductsList = ({ title, showViewAllButton = true }: ProductsListProps) => {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  // Función para seleccionar 5 productos aleatorios
+  const getRandomProducts = (products: Product[]) => {
+    const shuffled = [...products].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 5);
+  };
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const allProducts = await getProducts();
+        const randomProducts = getRandomProducts(allProducts);
+        setProducts(randomProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <div className={styles.productsContainer}>
       {/* Título */}
@@ -40,7 +59,7 @@ const ProductsList = ({
         }}
       >
         {products.map((product) => (
-          <SwiperSlide key={product.id}>
+          <SwiperSlide key={product.product_id}>
             <ProductCard product={product} />
           </SwiperSlide>
         ))}

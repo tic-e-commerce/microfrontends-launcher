@@ -25,34 +25,60 @@ services:
       - NEXT_PUBLIC_REMOTE_ORDERS_URL=${NEXT_PUBLIC_REMOTE_ORDERS_URL}
       - NEXT_PUBLIC_REMOTE_PAYMENTS_URL=${NEXT_PUBLIC_REMOTE_PAYMENTS_URL}
     command: npm run start
+  # auth-mf:
+  #   build:
+  #     context: ./auth-mf
+  #     dockerfile: Dockerfile
+  #     args:
+  #       NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+  #   ports:
+  #     - "3001:3001"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - HOST_APP_URL=${HOST_APP_URL}
+  #     - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+  #   command: npm run start
+  # profile-mf:
+  #   build:
+  #     context: ./profile-mf
+  #     dockerfile: Dockerfile
+  #     args:
+  #       NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+  #   ports:
+  #     - "3002:3002"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - HOST_APP_URL=${HOST_APP_URL}
+  #     - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+  #   command: npm run start
 
-  auth-mf:
-    build:
-      context: ./auth-mf
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
-    ports:
-      - "3001:3001"
-    environment:
-      - NODE_ENV=production
-      - HOST_APP_URL=${HOST_APP_URL}
-      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
-    command: npm run start
+  # user-preferences-mf:
+  #   build:
+  #     context: ./user-preferences-mf
+  #     dockerfile: Dockerfile
+  #     args:
+  #       NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+  #   ports:
+  #     - "3003:3003"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - HOST_APP_URL=${HOST_APP_URL}
+  #     - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+  #   command: npm run start
 
-  profile-mf:
-    build:
-      context: ./profile-mf
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
-    ports:
-      - "3002:3002"
-    environment:
-      - NODE_ENV=production
-      - HOST_APP_URL=${HOST_APP_URL}
-      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
-    command: npm run start
+  # cart-mf:
+  #   build:
+  #     context: ./cart-mf
+  #     dockerfile: Dockerfile
+  #     args:
+  #       NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+  #   ports:
+  #     - "3004:3004"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - HOST_APP_URL=${HOST_APP_URL}
+  #     - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+  #   command: npm run start
 
   user-preferences-mf:
     build:
@@ -138,9 +164,10 @@ services:
   #     - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
   #   command: npm run start
 
-  reviews-mf:
+  review-mf:
+    # Cambio de "reviews-mf" a "review-mf"
     build:
-      context: ./review-mf
+      context: ./reviews-mf
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
