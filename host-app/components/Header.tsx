@@ -146,7 +146,7 @@ const Header = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link href="/account/orders" className="dropdown-item">
+                        <Link href="/my-orders" className="dropdown-item">
                           <FontAwesomeIcon
                             icon={faBagShopping}
                             className="me-2"

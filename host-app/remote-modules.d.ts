@@ -58,6 +58,11 @@ declare module "orders/Orders" {
   export default Orders;
 }
 
+declare module "orders/PaidOrders" {
+  const PaidOrders: React.ComponentType;
+  export default PaidOrders;
+}
+
 // ***PAYMENTS MODULE***
 
 declare module "payments/Payments" {
