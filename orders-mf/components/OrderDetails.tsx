@@ -32,7 +32,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ orderItems }) => {
           {orderItems.length > itemsPerPage && (
             <div className="pagination-controls d-flex justify-content-between">
               <button
-                className="btn btn-outline-secondary btn-sm"
+                className="custom-btn custom-btn-outline-secondary custom-btn-sm"
                 onClick={() => setStartIndex(startIndex - itemsPerPage)}
                 disabled={startIndex === 0}
               >
@@ -40,7 +40,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ orderItems }) => {
               </button>
 
               <button
-                className="btn btn-outline-secondary btn-sm"
+                className="custom-btn custom-btn-outline-secondary custom-btn-sm"
                 onClick={() => setStartIndex(startIndex + itemsPerPage)}
                 disabled={startIndex + itemsPerPage >= orderItems.length}
               >

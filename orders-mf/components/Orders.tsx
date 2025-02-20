@@ -185,7 +185,7 @@ const Orders: React.FC = () => {
       ⚡ Unable to create order. Please refresh the page to try again.
       <div className="d-flex justify-content-center mt-3">
         <button
-          className="btn btn-danger text-white px-4 py-2"
+          className="custom-btn custom-btn-danger text-white px-4 py-2"
           style={{
             borderRadius: "2px",
             fontSize: "16px",
@@ -240,7 +240,7 @@ const Orders: React.FC = () => {
                   👉 <strong>Please reload the page to create a new order and continue.</strong>
                 </p>
                 <button
-                  className="btn btn-primary text-white mt-2 px-4 py-2"
+                  className="custom-btn custom-btn-primary text-white mt-2 px-4 py-2"
                   onClick={() => window.location.reload()}
                 >
                   🔄 Create New Order
@@ -265,7 +265,7 @@ const Orders: React.FC = () => {
 
             {!isExpired && (
               <button
-                className="btn btn-secondary btn-cancel-order"
+                className="custom-btn custom-btn-secondary custom-btn-cancel-order"
                 onClick={() => setShowCancelModal(true)}
               >
                 Cancel Order
