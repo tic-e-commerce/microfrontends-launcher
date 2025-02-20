@@ -6,6 +6,7 @@ interface OrderItemProps {
 }
 
 const OrderItem: React.FC<OrderItemProps> = ({ item }) => (
+  
   <li className="list-group-item">
     <img src={item.image_url} alt={item.product_name} />
     <div className="flex-grow-1">

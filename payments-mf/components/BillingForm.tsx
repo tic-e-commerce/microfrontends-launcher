@@ -23,6 +23,7 @@ interface BillingFormProps {
   };
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+  disabled?: boolean; 
 }
 
 const capitalizeFirstLetter = (text: string) => {
@@ -35,6 +36,7 @@ const BillingForm: React.FC<BillingFormProps> = ({
   isTouched,
   handleInputChange,
   handleBlur,
+  disabled = false, 
 }) => {
   return (
     <form>
@@ -61,6 +63,7 @@ const BillingForm: React.FC<BillingFormProps> = ({
               onChange={handleInputChange}
               onBlur={handleBlur}
               required={field !== "lastName"}
+              disabled={disabled} // 🔒 Deshabilitar si la orden expiró
             />
             {field !== "lastName" &&
               isTouched[field as keyof typeof isTouched] &&

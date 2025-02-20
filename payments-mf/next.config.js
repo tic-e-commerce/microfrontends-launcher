@@ -37,6 +37,8 @@ const nextConfig = {
         remotes: remotes(options.isServer),
         exposes: {
           "./Payments": "./components/Payments.tsx",
+          "./PaymentSuccess": "./components/PaymentSuccess.tsx", 
+          "./PaymentCancel": "./components/PaymentCancel.tsx", 
         },
         extraOptions: {
           exposePages: true,
